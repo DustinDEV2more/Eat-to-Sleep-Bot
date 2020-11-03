@@ -11,7 +11,7 @@ module.exports = {
 
         const MEMBER = require("../models/MEMBER")
         
-        if (client.guilds.get(message.channel.guild.id).members.get(message.author.id).hasPermission("BAN_MEMBERS")){
+        if (client.guilds.cache.get(message.channel.guild.id).members.cache.get(message.author.id).hasPermission("BAN_MEMBERS")){
             var operation = args[2]
             var what = args[1]
             var zahl = parseInt(args[3])
@@ -38,7 +38,7 @@ module.exports = {
                         }
                         await MEMBER.findOneAndUpdate({"info.id": userid}, {"ranks.xp": xp, "ranks.rank": rank}, (err, res) => {if (err){console.log(err)}})
 
-                        message.reply("Ich habe erfolgreich denn ranking Wert von " + client.users.get(userid).username + " auf " + rank + ":" + xp + " gesetzt.")
+                        message.reply("Ich habe erfolgreich denn ranking Wert von " + client.users.cache.get(userid).username + " auf " + rank + ":" + xp + " gesetzt.")
 
                     }
                     else {message.reply("Du kannst nur denn Wert von XP und Level bestimmen")}

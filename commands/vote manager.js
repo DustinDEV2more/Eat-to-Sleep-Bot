@@ -10,7 +10,7 @@ module.exports = {
         const colour = require("../colours.json")
         const VOTEDB = require("../models/VOTES")
         
-        if (client.guilds.get(message.guild.id).members.get(message.author.id).hasPermission("ADMINISTRATOR")){
+        if (client.guilds.cache.get(message.guild.id).members.cache.get(message.author.id).hasPermission("ADMINISTRATOR")){
 
            async function createvote(){
             args = args.join(" ")

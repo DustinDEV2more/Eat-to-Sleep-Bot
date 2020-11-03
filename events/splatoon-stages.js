@@ -101,8 +101,8 @@ client.on("ready", () => {
                     // "4id": jsonlangs["details"][0]["weapons"][3]["id"]
             //}
             function getemote(id){
-                if (client.guilds.get("604747271862485012").emojis.find(x => x.name === id)){
-                    var emojiid = client.guilds.get("604747271862485012").emojis.find(x => x.name === id).id
+                if (client.guilds.cache.get("604747271862485012").emojis.find(x => x.name === id)){
+                    var emojiid = client.guilds.cache.get("604747271862485012").emojis.find(x => x.name === id).id
                     return `<:${id}:${emojiid}>`
                 }
                 else {
@@ -169,49 +169,22 @@ client.on("ready", () => {
 
             
             
-            client.channels.get("587721175996825610").fetchMessage("587721573989875720").then(message => message.edit(standard))
-            client.channels.get("587721175996825610").fetchMessage("587721574749306923").then(message => message.edit(rank))
-            client.channels.get("587721175996825610").fetchMessage("587721576276033560").then(message => message.edit(liga))
-            client.channels.get("587721175996825610").fetchMessage("587722399298879498").then(message => message.edit(Salmonrun))
+            client.channels.cache.get("587721175996825610").fetchMessage("587721573989875720").then(message => message.edit(standard))
+            client.channels.cache.get("587721175996825610").fetchMessage("587721574749306923").then(message => message.edit(rank))
+            client.channels.cache.get("587721175996825610").fetchMessage("587721576276033560").then(message => message.edit(liga))
+            client.channels.cache.get("587721175996825610").fetchMessage("587722399298879498").then(message => message.edit(Salmonrun))
 
     })})} )} )}
-   
-        var date = new Date();
-            
-var current_hour = date.getHours();
-var current_minutes = date.getMinutes();
-var timeanddate1 = new RichEmbed().setDescription("zuletzt aktualisiert: " + addZero(current_hour) + ":" + addZero(current_minutes) + " Uhr" + reason + "\n[Data received from Splatoon2.ink](https://splatoon2.ink/)")
-client.channels.get("587721175996825610").fetchMessage("589502842562412546").then(message => message.edit(timeanddate1))
+
 
 
 
         refrechdata()
 
 var j = schedule.scheduleJob("30 0 * * * *", function(){
-
- refrechdata()  //führt denn gesameten oben gezeigten Code aus == Refresht die Map daten in denn Masseges
-
- var date1 = new Date();            // Info Message
- var current_hour1 = date1.getHours();
- var current_minutes1 = date1.getMinutes();
- timeanddate1 = new RichEmbed().setDescription("zuletzt aktualisiert: " + addZero(current_hour1) + ":" + addZero(current_minutes1) + " Uhr" + "\n[Data received from Splatoon2.ink](https://splatoon2.ink/data/)")
- client.channels.get("587721175996825610").fetchMessage("589502842562412546").then(message => message.edit(timeanddate1))
- 
- 
-
-
-
-
+ refrechdata()
+ console.log("The Splatoon Maps refreshed just now")
 });
-
-var k = schedule.scheduleJob("0 * * * * *", function(){ //Setzt die Zeitangabe bis zum nächsten Data Refrech in der Info Message
-
-    function getMinutesUntilNextHour() {
-       var one = 60 - new Date().getMinutes();
-        return addZero(one) }
-    var timeanddatewithnextrefreshcounter = timeanddate1.setFooter("next auto-refresh in: " + getMinutesUntilNextHour() + " Minutes")
-    client.channels.get("587721175996825610").fetchMessage("589502842562412546").then(message => message.edit(timeanddate1))
-    });
    
     
 

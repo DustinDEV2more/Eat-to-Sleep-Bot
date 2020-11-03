@@ -27,7 +27,7 @@ if (await dbdata.length == 0){
 message.cleanContent)
 .setTimestamp(message.createdAt)
 
-var starmessage = await client.channels.get(channelid).send(embed)
+var starmessage = await client.channels.cache.get(channelid).send(embed)
 
     new StarboardDB({
         msgid: MessageReaction.message.id,
@@ -49,7 +49,7 @@ var embed = new RichEmbed().setColor("#fef200").setAuthor(message.member.display
 message.cleanContent)
 .setTimestamp(dbdata[0].date)
 
-client.channels.get(channelid).fetchMessage(dbdata[0].starmsgid).then(m => m.edit(embed))
+client.channels.cache.get(channelid).fetchMessage(dbdata[0].starmsgid).then(m => m.edit(embed))
 
 }
 })
@@ -77,7 +77,7 @@ var embed = new RichEmbed().setColor("#fef200").setAuthor(message.member.display
 message.cleanContent)
 .setTimestamp(dbdata[0].date)
 
-client.channels.get(channelid).fetchMessage(dbdata[0].starmsgid).then(m => m.edit(embed))
+client.channels.cache.get(channelid).fetchMessage(dbdata[0].starmsgid).then(m => m.edit(embed))
 
 }
 })

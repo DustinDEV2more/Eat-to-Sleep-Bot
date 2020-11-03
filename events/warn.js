@@ -13,7 +13,7 @@ client.on("message",async message => {
     let messageArray = message.content.split(" ")
     let alias = messageArray[0].replace(prefix, "");
     let args = messageArray.slice(1);
-    let permissions = message.guild.members.get(message.author.id).permissions
+    let permissions = message.guild.members.cache.get(message.author.id).permissions
 
     if (message.content.startsWith(prefix + "warn")){
         if(permissions.has("BAN_MEMBERS")){
@@ -48,7 +48,7 @@ client.on("message",async message => {
             else if ( message.content.includes("--kick") ){
                 memberdb[0].warns.push({type: "kick", from: message.member.id, description: warngrund})
                 await MEMBER.findOneAndUpdate({"info.id": badmemberid}, {"warns": memberdb[0].warns})
-                message.guild.members.get(badmemberid).kick(warngrund)
+                message.guild.members.cache.get(badmemberid).kick(warngrund)
                 embed_color = colour.rot
                 type = "KICK"
             }
@@ -56,7 +56,7 @@ client.on("message",async message => {
             else if ( message.content.includes("--bann") || message.content.includes("--ban") ){
                 memberdb[0].warns.push({type: "ban", from: message.member.id, description: warngrund})
                 await MEMBER.findOneAndUpdate({"info.id": badmemberid}, {"warns": memberdb[0].warns})
-                message.guild.members.get(badmemberid).ban(warngrund)
+                message.guild.members.cache.get(badmemberid).ban(warngrund)
                 embed_color = colour.rot
                 type = "BAN"
             }
@@ -68,11 +68,11 @@ client.on("message",async message => {
             type = "WARN"
             }
             
-            message.guild.channels.get("597165525319155749").send(new RichEmbed()
+            message.guild.channels.cache.get("597165525319155749").send(new RichEmbed()
             .setColor(embed_color)
             .setTitle("CASE " + memberdb[0]["_id"])
-            .addField("EXECUTOR", message.guild.members.get(message.author.id).user.tag, true)
-            .addField("VICTIM", message.guild.members.get(badmemberid).user.tag, true)
+            .addField("EXECUTOR", message.guild.members.cache.get(message.author.id).user.tag, true)
+            .addField("VICTIM", message.guild.members.cache.get(badmemberid).user.tag, true)
             .addField("TYPE", type, true)
             .addField("DESCRIPTION", warngrund, true)
             )
@@ -80,7 +80,7 @@ client.on("message",async message => {
             message.channel.send(new RichEmbed()
             .setColor(embed_color)
             .setTitle("Verwarnung gespeichert")
-            .addField("VICTIM", message.guild.members.get(badmemberid).user.tag, true)
+            .addField("VICTIM", message.guild.members.cache.get(badmemberid).user.tag, true)
             .addField("TYPE", type, true)
             .addField("DESCRIPTION", warngrund, true)
             )
@@ -97,7 +97,7 @@ client.on("message",async message => {
             memberdb[0].warns.push({type: "ad", from: client.user.id, description: `Versuchte einen Discord Invite in ${message.channel.name} zu senden`})            
             await MEMBER.findOneAndUpdate({"info.id": message.member.id}, {"warns": memberdb[0].warns})
             
-            message.guild.channels.get("597165525319155749").send(new RichEmbed()
+            message.guild.channels.cache.get("597165525319155749").send(new RichEmbed()
             .setColor("#8e24aa")
             .setTitle("CASE " + memberdb[0]["_id"])
             .addField("EXECUTOR", client.user.tag, true)
@@ -127,7 +127,7 @@ client.on("message",async message => {
             memberdb[0].warns.push({type: "warn", from: client.user.id, description: `Versuchte @everyone oder @here in ${message.channel.name} zu senden`})            
             await MEMBER.findOneAndUpdate({"info.id": message.member.id}, {"warns": memberdb[0].warns})
             
-            message.guild.channels.get("597165525319155749").send(new RichEmbed()
+            message.guild.channels.cache.get("597165525319155749").send(new RichEmbed()
             .setColor(colour.gelb)
             .setTitle("CASE " + memberdb[0]["_id"])
             .addField("EXECUTOR", client.user.tag, true)

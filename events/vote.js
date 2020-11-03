@@ -12,7 +12,7 @@ client.on("messageReactionAdd", async (Reaction, user) => {
     if (!DB) return;
 
     if (DB.voted.includes(user.id)){ return Reaction.remove(user)}
-if (client.guilds.get("585511241628516352").roles.get("712830005452865566").members.find(x => x.id === user.id)) return Reaction.remove(user);
+if (client.guilds.cache.get("585511241628516352").roles.cache.get("712830005452865566").members.find(x => x.id === user.id)) return Reaction.remove(user);
 
     var votetfor = parseInt(Reaction.emoji.name.replace("1⃣", "0").replace("2⃣", "1").replace("3⃣", "2").replace("4⃣", "3").replace("5⃣", "4").replace("6⃣", "5").replace("7⃣", "6").replace("8⃣", "7").replace("9⃣", "8"))
     if (typeof votetfor != "number") return console.log("Break because of Number check");

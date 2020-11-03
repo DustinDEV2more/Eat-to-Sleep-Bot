@@ -29,8 +29,8 @@ traslatehelp.then(function (jsonlang) {
         //update Splatfest Role
         if (splatfestend > new Date()){
 
-            client.guilds.get("585511241628516352").roles.get("714098535385137152").setName(`${jsonlang.festivals[json.eu.festivals[0].festival_id].names.alpha_long}`)
-            client.guilds.get("585511241628516352").roles.get("714098613399191643").setName(`${jsonlang.festivals[json.eu.festivals[0].festival_id].names.bravo_long}`)
+            client.guilds.cache.get("585511241628516352").roles.cache.get("714098535385137152").setName(`${jsonlang.festivals[json.eu.festivals[0].festival_id].names.alpha_long}`)
+            client.guilds.cache.get("585511241628516352").roles.cache.get("714098613399191643").setName(`${jsonlang.festivals[json.eu.festivals[0].festival_id].names.bravo_long}`)
             }
 
 var Splatfest = new channelMclass(
@@ -80,7 +80,7 @@ var Profi_KampfA = prozentrechner(splatfestresults.rates.challenge.alpha, splatf
 var Profi_KampfB = prozentrechner(splatfestresults.rates.challenge.bravo, splatfestresults.rates.challenge.alpha)
 
 var names = [jsonlang.festivals[jsonn.eu.festivals[0].festival_id].names.alpha_short, jsonlang.festivals[jsonn.eu.festivals[0].festival_id].names.bravo_short, "2", "3", jsonlang.festivals[jsonn.eu.festivals[0].festival_id].names.bravo_short, jsonlang.festivals[jsonn.eu.festivals[0].festival_id].names.alpha_short, "6", "7"]
-        client.channels.get("586177035278483466").send(
+        client.channels.cache.get("586177035278483466").send(
             new RichEmbed()
             .setTitle("DIE SPLATFEST ERGEBNISSE SIND DA!").setColor("RANDOM")
             .setThumbnail("https://splatoon2.ink/assets/splatnet" + jsonn.eu.festivals[0].images.panel)
@@ -106,36 +106,29 @@ var names = [jsonlang.festivals[jsonn.eu.festivals[0].festival_id].names.alpha_s
             if (check == false) return;
         fetch(`https://app.splatoon2.nintendo.net/api/festivals/${json.eu.festivals[0].festival_id}/votes`, {headers: {"cookie": `iksm_session=${config.tokens.nintendo}; lang=de-DE;`}}).then(res => res.json())
         .then(json => {
-            // json.nickname_and_icons.forEach(async player => {
-            //     var member = await MEMBER.findOne({"more.nintendo": player.nsa_id})
-            //     if (!member) return;
-
-            //     if (json.votes.alpha.find(x => x === member.more.nintendo)) client.guilds.get("585511241628516352").members.get(member.info.id).addRole("714098535385137152")
-            //     if (json.votes.bravo.find(x => x === member.more.nintendo)) client.guilds.get("585511241628516352").members.get(member.info.id).addRole("714098613399191643")
-            // })
             json.votes.alpha.forEach(async player_nsaid => {
                 var member = await MEMBER.findOne({"more.nintendo": player_nsaid})
                 if (!member) return;
 
-                if (json.votes.alpha.find(x => x === member.more.nintendo)) client.guilds.get("585511241628516352").members.get(member.info.id).addRole("714098535385137152")
+                if (json.votes.alpha.find(x => x === member.more.nintendo)) client.guilds.cache.get("585511241628516352").members.get(member.info.id).addRole("714098535385137152")
             })
 
             json.votes.bravo.forEach(async player_nsaid => {
                 var member = await MEMBER.findOne({"more.nintendo": player_nsaid})
                 if (!member) return;
 
-                if (json.votes.bravo.find(x => x === member.more.nintendo)) client.guilds.get("585511241628516352").members.get(member.info.id).addRole("714098613399191643")
+                if (json.votes.bravo.find(x => x === member.more.nintendo)) client.guilds.cache.get("585511241628516352").members.get(member.info.id).addRole("714098613399191643")
             })
 
         })
         })
         var postresults2 = schedule.scheduleJob(splatfestresult, function(){
             check = false
-            client.guilds.get("585511241628516352").members.forEach(m => {
+            client.guilds.cache.get("585511241628516352").members.cache.forEach(m => {
                 m.removeRoles(["714098535385137152", "714098613399191643"])
             })
-            client.guilds.get("585511241628516352").roles.get("714098535385137152").setName(`Splatfest Team A`)
-            client.guilds.get("585511241628516352").roles.get("714098613399191643").setName(`Splatfest Team B`)
+            client.guilds.cache.get("585511241628516352").roles.cache.get("714098535385137152").setName(`Splatfest Team A`)
+            client.guilds.cache.get("585511241628516352").roles.cache.get("714098613399191643").setName(`Splatfest Team B`)
             
         })
     }

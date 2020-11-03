@@ -9,7 +9,7 @@ client.on("message", message => {
 
     setTimeout(async () => {
 
-        var botrespond = client.channels.get(message.channel.id).lastMessage
+        var botrespond = client.channels.cache.get(message.channel.id).lastMessage
         
 
         if (botrespond.author.id != "302050872383242240") return;

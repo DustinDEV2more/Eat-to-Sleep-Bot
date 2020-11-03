@@ -8,7 +8,7 @@ const MEMBER = require("../models/MEMBER")
 
 client.on("guildMemberUpdate", (oldm, newm) => {
     if (oldm.roles.find(r => r.name === "Server Booster") == false && newm.roles.find(r => r.name === "Server Booster") == true){
-        newm.guild.channels.get("586177035278483466").send(
+        newm.guild.channels.cache.get("586177035278483466").send(
             new RichEmbed().setThumbnail("https://pbs.twimg.com/media/EWdeUeHXkAQgJh7.png")
             .setColor("#ff19f3")
             .setTitle("Neuer Server Boost")

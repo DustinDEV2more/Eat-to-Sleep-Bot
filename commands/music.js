@@ -38,7 +38,7 @@ module.exports = {
           //music main process
          async function play(guildid) {
             if (client.music[guildid].queue.length == 0) {
-            client.guilds.get(guildid).members.get("585521607875756042").voiceChannel.leave();
+            client.guilds.cache.get(guildid).members.cache.get("585521607875756042").voiceChannel.leave();
             client.music[guildid] = null
           } else if (client.music[guildid].queue.length > 0){
             

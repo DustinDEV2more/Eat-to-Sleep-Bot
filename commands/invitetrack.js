@@ -11,7 +11,7 @@ module.exports = {
         const colour = require("../colours.json")
         
         async function dosd() {
-            if (client.guilds.get(message.guild.id).members.get(message.author.id).hasPermission("ADMINISTRATOR")){
+            if (client.guilds.cache.get(message.guild.id).members.cache.get(message.author.id).hasPermission("ADMINISTRATOR")){
                 var invitecode = args[0].replace("https://discord.gg/", "")
                 var invitetag = args[1]
                 console.log(invitecode, invitetag)

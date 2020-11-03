@@ -12,9 +12,9 @@ class EventChannel {
         var xpboostchecker = null
 
         var openchannels = schedule.scheduleJob(start, function(){
-            client.guilds.get(server).createChannel(eventname, "category", client.guilds.get(server).channels.get(permcopie).permissionOverwrites).then(async categorie =>{
+            client.guilds.cache.get(server).createChannel(eventname, "category", client.guilds.cache.get(server).channels.get(permcopie).permissionOverwrites).then(async categorie =>{
                
-              client.guilds.get(server).roles.get("712830005452865566").members.forEach(async (m) => {
+              client.guilds.cache.get(server).roles.cache.get("712830005452865566").members.forEach(async (m) => {
                await categorie.overwritePermissions(m.id, {"VIEW_CHANNEL": false, "SPEAK": false, "CONNECT": false, "SEND_MESSAGES": false})
               })
 
@@ -56,9 +56,9 @@ class EventChannel {
 
         var closechannels = schedule.scheduleJob(end, async function(){
           if (xpboost == true){clearInterval(xpboostchecker)}
-            var checkoutchannel = await client.guilds.get(server).createChannel("📤" + talkname + " moveout", "voice").then(async c => await c.setParent(redirect))
+            var checkoutchannel = await client.guilds.cache.get(server).createChannel("📤" + talkname + " moveout", "voice").then(async c => await c.setParent(redirect))
 
-            client.guilds.get(server).channels.find(x => x.name === eventname).children.forEach(c => {
+            client.guilds.cache.get(server).channels.find(x => x.name === eventname).children.forEach(c => {
               if(c.type == "text") return c.delete();
 
               const childrenpromises = c.members.array().map(async m => {
@@ -68,10 +68,10 @@ class EventChannel {
                 c.delete()
               })
             })
-            client.guilds.get(server).channels.find(x => x.name === eventname).delete()
+            client.guilds.cache.get(server).channels.find(x => x.name === eventname).delete()
 
               var checkmoveout = setInterval(async () => {
-                  var moveoutsize = client.channels.get(checkoutchannel.id).members.array().length
+                  var moveoutsize = client.channels.cache.get(checkoutchannel.id).members.array().length
                   if (moveoutsize != 0) return;
                  await checkoutchannel.delete()
                  clearInterval(checkmoveout)

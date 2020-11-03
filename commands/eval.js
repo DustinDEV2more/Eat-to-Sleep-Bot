@@ -10,7 +10,7 @@ module.exports = {
 
         const { inspect } = require("util")
         
-        if (client.guilds.get(message.guild.id).members.get(message.author.id).hasPermission("ADMINISTRATOR")){
+        if (client.guilds.cache.get(message.guild.id).members.cache.get(message.author.id).hasPermission("ADMINISTRATOR")){
          const input = args.join(" ")
 
         try {

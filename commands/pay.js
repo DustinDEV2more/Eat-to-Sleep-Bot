@@ -14,15 +14,15 @@ module.exports = {
             user   = null
 
         //Check if first arg is a number and second is a user
-        if (isNaN(args[0]) == false && message.channel.guild.members.get(args[1].replace("<@", "").replace(">", "").replace("!", ""))){
+        if (isNaN(args[0]) == false && message.channel.guild.members.cache.get(args[1].replace("<@", "").replace(">", "").replace("!", ""))){
             amount = parseInt(args[0])
-            user = message.channel.guild.members.get(args[1].replace("<@", "").replace(">", "").replace("!", "")).id
+            user = message.channel.guild.members.cache.get(args[1].replace("<@", "").replace(">", "").replace("!", "")).id
         }
 
         //Check if first arg is a user and second is a number
-        else if (isNaN(args[1]) == false && message.channel.guild.members.get(args[0].replace("<@", "").replace(">", "").replace("!", ""))){
+        else if (isNaN(args[1]) == false && message.channel.guild.members.cache.get(args[0].replace("<@", "").replace(">", "").replace("!", ""))){
             amount = parseInt(args[1])
-            user = message.channel.guild.members.get(args[0].replace("<@", "").replace(">", "").replace("!", "")).id
+            user = message.channel.guild.members.cache.get(args[0].replace("<@", "").replace(">", "").replace("!", "")).id
         }
         //Notifys User if he uses the command wrong
         else {
@@ -48,7 +48,7 @@ module.exports = {
         await dbdata.findOneAndUpdate({"info.id": message.member.id}, {"coins.amount": newpayingamount})
         await dbdata.findOneAndUpdate({"info.id": user}, {"coins.amount": newpayedamount})
 
-        message.channel.send(new RichEmbed().setColor(colour.grün).setDescription(`Deine ${amount}<:EatSleepCoin:725823305008939058> wurden erfolgreich zu ${message.channel.guild.members.get(user).displayName} geschickt`))
+        message.channel.send(new RichEmbed().setColor(colour.grün).setDescription(`Deine ${amount}<:EatSleepCoin:725823305008939058> wurden erfolgreich zu ${message.channel.guild.members.cache.get(user).displayName} geschickt`))
 
 	},
 };

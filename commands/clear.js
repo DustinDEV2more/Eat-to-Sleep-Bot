@@ -8,7 +8,7 @@ module.exports = {
         const { RichEmbed } = require('discord.js')
         const colour = require("../colours.json")
         
-        if (client.guilds.get(message.guild.id).members.get(message.author.id).hasPermission("MANAGE_MESSAGES")){
+        if (client.guilds.cache.get(message.guild.id).members.cache.get(message.author.id).hasPermission("MANAGE_MESSAGES")){
             if (args[0] < 101){
             message.channel.fetchMessages({ limit: args[0] }).then(messages => {
 

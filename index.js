@@ -1,13 +1,7 @@
 process.env.TZ = 'Europe/Berlin'
-const colour = require("./colours.json")
 const fs      = require("fs");
 const config = JSON.parse(fs.readFileSync("config.json", "utf8"));
-var request = require('request');
-const MEMBER = require("./models/MEMBER")
-
 const Discord = require("discord.js");
-const { RichEmbed } = require('discord.js')
-
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
@@ -39,7 +33,7 @@ require("./events/shop-system")
             //member already left
             if (mdb.expire && mdb.expire != null) return;
             //member is still in server
-            if (client.guilds.get("585511241628516352").fetchMembers().then(r => r.members.array().find(mm => mdb.info.id === mm.user.id))) return;
+            if (client.guilds.get("585511241628516352").members.cache.then(mm => mdb.info.id === mm.user.id)) return;
             //member is not in server anymore
             else {
             console.log("\x1b[31m" + mdb.info.name + " has left the Server without my notice");
@@ -57,11 +51,11 @@ setInterval(function(){
         
 
 let statuses = [
-    `Codet by ${client.users.get("330380702505762817").tag}`,
-    client.guilds.get("585511241628516352").roles.get("585511864931188856").members.size + " Members on " + client.guilds.get("585511241628516352").name,
-    client.guilds.get("585511241628516352").roles.get("587375374967767054").members.size + " Bots on " + client.guilds.get("585511241628516352").name,
-    client.guilds.get("585511241628516352").roles.size + " Roles on " + client.guilds.get("585511241628516352").name,
-    client.guilds.get("585511241628516352").emojis.size + " Emotes on " + client.guilds.get("585511241628516352").name,
+    `Codet by ${client.users.cache.get("330380702505762817").tag}`,
+    client.cache.guilds.get("585511241628516352").roles.cache.get("585511864931188856").members.size + " Members on " + client.guilds.cache.get("585511241628516352").name,
+    client.cache.guilds.get("585511241628516352").roles.cache.get("587375374967767054").members.size + " Bots on " + client.guilds.cache.get("585511241628516352").name,
+    client.cache.guilds.get("585511241628516352").roles.size + " Roles on " + client.guilds.cache.get("585511241628516352").name,
+    client.cache.guilds.get("585511241628516352").emojis.size + " Emotes on " + client.guilds.cache.get("585511241628516352").name,
     "Bot Ping: " + Math.round(client.ping),
     `Need some Help? ${config.prefix}help`,
     `Written with Discord.js v.${Discord.version} in Javascript`,
@@ -111,7 +105,7 @@ client.on("message", (message) => {
     if (message.channel.type == "dm") return;
     if (message.content.startsWith(prefix) == false) return require("./events/collectxp").messagexp(message);
     if (!client.commands.has(alias)) return;
-    if (client.guilds.get("585511241628516352").roles.get("712830005452865566").members.find(m => m.id === message.author.id)) return message.reply("Du kannst aktuell leider keine Commands benutzen");
+    if (client.guilds.cache.get("585511241628516352").roles.cache.get("712830005452865566").members.find(m => m.id === message.author.id)) return message.reply("Du kannst aktuell leider keine Commands benutzen");
 
     
 

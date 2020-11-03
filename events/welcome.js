@@ -28,7 +28,7 @@ client.on("guildMemberAdd",async (user) => {
            var rulemsg = channel.send(new RichEmbed().setColor("#00cec9").setTitle("Schau dir mal die Regeln an.").setDescription("```Einen Moment bitte. Ich lade die Regeln herunter... ^^```"))
            var acceptrules = channel.send(new RichEmbed().setColor("#00b894").setTitle("Ende des Tutorials:").setDescription("Alles okay soweit? Dann bist du hiermit am Ende des Tutorials angelangt. Jetzt musst du nur noch auf das ✅ drücken um auf das nächste Level zu kommen und um die Regeln zu akzeptieren")).then(m => m.react("✅"))
            
-            user.guild.channels.get("585859881123184645").fetchMessage("596431765359296522").then(m => rules = m.content.replace("Discord Nutzervereinbarung", "[Discord Nutzervereinbarung](https://discordapp.com/terms)"))
+            user.guild.channels.cache.get("585859881123184645").fetchMessage("596431765359296522").then(m => rules = m.content.replace("Discord Nutzervereinbarung", "[Discord Nutzervereinbarung](https://discordapp.com/terms)"))
             rulemsg.then(m => m.edit(new RichEmbed().setColor("#00cec9").setTitle("Schau dir mal die Regeln an.").setDescription(rules)))
     })
 }
@@ -42,7 +42,7 @@ client.on("guildMemberAdd",async (user) => {
         user.guild.channels.find(x => x.name === "willkommen").send(new RichEmbed().setDescription(`<:rejoin:723487019241701477> **${user.user.tag}** ist gerade Eat, Sleep, Nintendo, Repeat beigetreten\n**Willkommen zurück^^**`)
             .setColor("RANDOM")
             .setThumbnail(user.user.displayAvatarURL))
-            user.guild.members.get(user.id).addRole("585511864931188856")
+            user.guild.members.cache.get(user.id).addRole("585511864931188856")
     }
 })
 
@@ -74,7 +74,7 @@ client.on("messageReactionAdd",async (Reaction, User) => {
             )
         )
         setTimeout(() => {
-            Reaction.message.guild.members.get(User.id).addRole("585511864931188856").then(
+            Reaction.message.guild.members.cache.get(User.id).addRole("585511864931188856").then(
                 Reaction.message.channel.delete()
             )
         }, 6000)
@@ -89,7 +89,7 @@ client.on("guildMemberRemove", async (user) => {
         if (client.channels.find(channelid)){client.channels.find(channelid).delete()}
     }
     if (user.guild.id != "585511241628516352") return;
-    client.guilds.get(user.guild.id).
+    client.guilds.cache.get(user.guild.id).
     channels.find(x => x.name === "willkommen").send(new RichEmbed().setDescription(`<:leafe:723485426169413686> **${user.user.tag}** hat gerade ${user.guild.name} verlassen`).setColor("RANDOM").setThumbnail(user.user.displayAvatarURL))
     
     await MEMBER.findOneAndUpdate({"info.id": user.user.id}, {"expire": Date.now()})

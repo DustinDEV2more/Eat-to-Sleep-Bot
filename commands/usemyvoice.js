@@ -20,7 +20,7 @@ module.exports = {
                
                 await MEMBERS.findOneAndUpdate({"info.id": message.member.id}, {"more.ytvoice": true})
 
-               client.channels.get("597165525319155749").send(
+               client.channels.cache.get("597165525319155749").send(
                 new RichEmbed()
                 .setColor(colour.grün)
                 .setTitle("Use my Voice zustimmung")

@@ -14,8 +14,8 @@ module.exports = {
 
         var user = message.author.id
         if (args[0]){
-            if (client.guilds.get("585511241628516352").members.find(x => x.id === args[0].replace("<@", "").replace(">", "").replace("!", ""))){
-            user = client.users.get(args[0].replace("<@", "").replace(">", "").replace("!", "")).id
+            if (client.guilds.cache.get("585511241628516352").members.find(x => x.id === args[0].replace("<@", "").replace(">", "").replace("!", ""))){
+            user = client.users.cache.get(args[0].replace("<@", "").replace(">", "").replace("!", "")).id
         }}
 
         const viewport = {

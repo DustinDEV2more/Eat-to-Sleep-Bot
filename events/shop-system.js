@@ -4,7 +4,7 @@ const colour = require("../colours.json")
 const fs = require("fs")
 
 
-client.channels.get("728261970851004446").fetchMessage("728262106176159755").then(m => {
+client.channels.cache.get("728261970851004446").fetchMessage("728262106176159755").then(m => {
 var embed = new RichEmbed().setColor("RANDOM").setTitle("Eat, Sleep - Shop").setFooter("Um etwas zu kaufen musst du '_buy <item nummer>' in einen anderen Chat eingeben")
 
 items.forEach(i => {
