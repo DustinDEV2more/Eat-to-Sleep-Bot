@@ -50,7 +50,7 @@ module.exports = {
                 );
             
 
-              client.music[guildid].dispatcher.on("end", async () => {
+              client.music[guildid].dispatcher.on("finish", async () => {
               client.music[guildid].queue.shift();
               play(guildid)
             })
