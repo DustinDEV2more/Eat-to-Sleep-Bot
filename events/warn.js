@@ -1,5 +1,5 @@
 const { client, config} = require('../index.js')
-const { RichEmbed } = require('discord.js')
+const RichEmbed  = require('discord.js').RichEmbed
 const colour = require("../colours.json")
 const Main = require('../index.js')
 const fs      = require("fs");
@@ -48,7 +48,7 @@ client.on("message",async message => {
             else if ( message.content.includes("--kick") ){
                 memberdb[0].warns.push({type: "kick", from: message.member.id, description: warngrund})
                 await MEMBER.findOneAndUpdate({"info.id": badmemberid}, {"warns": memberdb[0].warns})
-                message.guild.members.cache.get(badmemberid).kick(warngrund)
+                message.guild.members.cache.kick(badmemberid, {reason: warngrund})
                 embed_color = colour.rot
                 type = "KICK"
             }
@@ -56,7 +56,7 @@ client.on("message",async message => {
             else if ( message.content.includes("--bann") || message.content.includes("--ban") ){
                 memberdb[0].warns.push({type: "ban", from: message.member.id, description: warngrund})
                 await MEMBER.findOneAndUpdate({"info.id": badmemberid}, {"warns": memberdb[0].warns})
-                message.guild.members.cache.get(badmemberid).ban(warngrund)
+                message.guild.members.cache.ban(badmemberid).ban(badmemberid, {reason: warngrund})
                 embed_color = colour.rot
                 type = "BAN"
             }

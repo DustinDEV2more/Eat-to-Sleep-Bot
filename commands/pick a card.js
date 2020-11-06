@@ -37,7 +37,7 @@ module.exports = {
 
         // Create a reaction collector
         const filter = (reaction, user) => user.id === message.member.id && [reaction_numbers[1], reaction_numbers[2], reaction_numbers[3]].includes(reaction.emoji.name)
-        msg.awaitReactions(filter, { time: 15000, max: 1 })
+        msg.awaitReactions(filter, { time: 60000, max: 1 })
         .then(async collected => {
                 msg.clearReactions()
                 if (collected.size == 0) return msg.edit(new RichEmbed().setColor(colour.rot).setDescription("Du hast länger als 60 Sekunden gebraucht. Die Nachicht ist abgelaufen"))
@@ -46,8 +46,8 @@ module.exports = {
 
                 //User Picks Ass
                 if (votetfor - 1 == Ass){
-                        await dbdata.findOneAndUpdate({"info.id": message.member.id}, {"coins.amount": memberdb.coins.amount + einsatz * 1.5})
-                        msg.edit(new RichEmbed().setColor("#f1c40f").setTitle(`Du hast das Ass gezogen. Dein Einsatz von **${einsatz}**<:EatSleepCoin:725823305008939058> wurde auf **${einsatz * 1.5}** erhöht`))
+                        await dbdata.findOneAndUpdate({"info.id": message.member.id}, {"coins.amount": memberdb.coins.amount + Math.floor(einsatz * 1.5)})
+                        msg.edit(new RichEmbed().setColor("#f1c40f").setTitle(`Du hast das Ass gezogen. Dein Einsatz von **${einsatz}**<:EatSleepCoin:725823305008939058> wurde auf **${Math.floor(einsatz * 1.5)}** erhöht`))
                 }
                 else {        await dbdata.findOneAndUpdate({"info.id": message.member.id}, {"coins.amount": memberdb.coins.amount - einsatz})
                 msg.edit(new RichEmbed().setColor("#34495e").setTitle(`Du hast einen Flop gezogen. Du hast deinen Einsatz von **${einsatz}**<:EatSleepCoin:725823305008939058> verloren`))

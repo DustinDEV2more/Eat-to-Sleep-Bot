@@ -6,7 +6,7 @@ module.exports = {
        
 
         const { client, config} = require('../index')
-        const { RichEmbed } = require('discord.js')
+        const RichEmbed  = require('discord.js').RichEmbed
         const colour = require("../colours.json")
         const Discord = require('discord.js');
 
@@ -33,7 +33,7 @@ module.exports = {
                 waitUntil: 'networkidle0', // Wait until the network is idle
             });
             var screenshot = await page.screenshot();
-            const attachment = new Discord.Attachment(screenshot, `Rankcard von ${message.author.tag}.png`);
+            const attachment = new Discord.MessageAttachment(screenshot, `Rankcard von ${message.author.tag}.png`);
             message.channel.send(attachment)
           
             await browser.close();

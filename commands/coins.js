@@ -21,7 +21,6 @@ module.exports = {
        
         message.channel.send(new RichEmbed().setColor(colour.gelb).setTitle(`Kontostand von ${client.users.cache.get(user).tag}`)
         .setDescription(`**Eat, Sleep Coins: ${database.coins.amount}<:EatSleepCoin:725823305008939058>**`)
-        .setFooter("Dieser Command wird demnächst noch verschönert. Er wird dann so ähnlich aussehen wie _rank und mehr informationen über bisherige ausgaben und einnahmen haben")
         )
 	},
 };

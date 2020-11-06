@@ -5,7 +5,7 @@ module.exports = {
 	async execute(message, args) {
 
         const { client, config} = require('../index')
-        const { RichEmbed } = require('discord.js')
+        const RichEmbed  = require('discord.js').RichEmbed
         const colour = require("../colours.json")
 
         var itemID = parseInt(args[0])

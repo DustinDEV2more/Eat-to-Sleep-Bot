@@ -56,7 +56,7 @@ let statuses = [
     client.cache.guilds.get("585511241628516352").roles.cache.get("587375374967767054").members.size + " Bots on " + client.guilds.cache.get("585511241628516352").name,
     client.cache.guilds.get("585511241628516352").roles.size + " Roles on " + client.guilds.cache.get("585511241628516352").name,
     client.cache.guilds.get("585511241628516352").emojis.size + " Emotes on " + client.guilds.cache.get("585511241628516352").name,
-    "Bot Ping: " + Math.round(client.ping),
+    "Bot Ping: " + Math.round(client.ws.ping),
     `Need some Help? ${config.prefix}help`,
     `Written with Discord.js v.${Discord.version} in Javascript`,
     `Check my health: status.dustin-dm.de`,
@@ -64,7 +64,7 @@ let statuses = [
 ]
 
 let status = statuses[Math.floor(Math.random() * statuses.length)];
-client.user.setActivity(status, {type: "PLAYING"});
+client.user.setActivity(status,{ url: 'https://twitch.tv/dustin_dm', type: 'STREAMING' });
    
 
 }, 30000)

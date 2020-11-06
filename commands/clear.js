@@ -5,7 +5,7 @@ module.exports = {
 	execute(message, args) {
 
         const { client, config} = require('../index')
-        const { RichEmbed } = require('discord.js')
+        const RichEmbed  = require('discord.js').RichEmbed
         const colour = require("../colours.json")
         
         if (client.guilds.cache.get(message.guild.id).members.cache.get(message.author.id).hasPermission("MANAGE_MESSAGES")){
