@@ -95,7 +95,7 @@ items = items.sort(function(a, b){
 
 
 client.on("message", (message) => {
-   
+    if (client.guilds.cache.get("585511241628516352").roles.cache.get("712830005452865566").members.find(m => m.id === message.author.id)) return message.delete();
     let prefix = config.prefix;
     let messageArray = message.content.split(" ")
     let alias = messageArray[0].replace(prefix, "");
