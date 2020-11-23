@@ -24,7 +24,7 @@
     "node-fetch": "^2.6.1",
     "node-schedule": "^1.3.2",
     "opusscript": "0.0.7",
-    "puppeteer": "^5.4.1",
+    "puppeteer": "^5.5.0",
     "request": "^2.88.2",
     "util": "^0.12.3",
     "ytdl-core": "^4.0.6"
