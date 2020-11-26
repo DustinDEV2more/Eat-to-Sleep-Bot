@@ -27,12 +27,12 @@ client.on("message",async message => {
             
             if (!memberdb[0]){
                 message.channel.send(new RichEmbed().setTitle("Database Fehler").setDescription("Ich konnte denn User nicht in der Database finden. Ich habe jetzt einen Eintrag in der Database für ihn angelget. Bitte versuche es noch einmal").setColor(colour.rot))
-                var newmember = new MEMBER({
+                var newmember = await new MEMBER({
                     info:{
-                        id: badmemberid
+                        id: badmemberid,
+                        name: "warned before rules accepted#1234"
                     }
-               })
-               newmember.safe()
+               }).save()
                return;
             }
             var embed_color = null
