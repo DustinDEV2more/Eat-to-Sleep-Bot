@@ -31,7 +31,8 @@ client.on("message",async message => {
                     info:{
                         id: badmemberid,
                         name: "warned before rules accepted#1234"
-                    }
+                    },
+                    expire: new Date()
                }).save()
                return;
             }
