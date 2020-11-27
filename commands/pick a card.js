@@ -14,6 +14,7 @@ module.exports = {
         var memberdb = await dbdata.findOne({"info.id": message.member.id})
 
         var einsatz = parseInt(args[0])
+        if (einsatz < 0) return message.channel.send(new RichEmbed().setColor(colour.rot).setDescription("Just no"))
         if (isNaN(einsatz)) return message.channel.send(new RichEmbed().setColor(colour.rot).setDescription("Du musst einen gültigen Betrag zum zocken angeben"))
 
         if (einsatz > memberdb.coins.amount) return message.channel.send(new RichEmbed().setColor(colour.rot).setDescription("Wir spielen nicht um Geld was nicht existiert. Bitte sätze deinen Einsatz niedriger oder geh halt arbeiten"))
