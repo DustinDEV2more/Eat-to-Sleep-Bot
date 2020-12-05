@@ -10,11 +10,13 @@ client.cooldown = []
 exports.messagexp = async function messagexp(message) {
     if (client.guilds.get("585511241628516352").roles.get("712830005452865566").members.find(x => x.id === message.author.id)) return;
 
+    var random_xp = Math.floor(Math.random() * 5)
+
     if (client.cooldown.find(x => x == message.member.id)) return;
     var memberdbdata = await MEMBER.findOne({"info.id": message.member.id})
     var nextlevelxp = 10 * memberdbdata.ranks.rank / 10 * 5; 
 
-    var data = {rank: memberdbdata.ranks.rank, xp: memberdbdata.ranks.xp + 1}
+    var data = {rank: memberdbdata.ranks.rank, xp: memberdbdata.ranks.xp + random_xp}
     if  (data.xp > nextlevelxp - 1){data.xp = 0, data.rank += 1}
 
     await MEMBER.findOneAndUpdate({"info.id": message.member.id}, {"ranks.xp": data.xp, "ranks.rank": data.rank}, (err, res) => {if (err){console.log(err)}})
