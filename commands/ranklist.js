@@ -12,7 +12,7 @@ module.exports = {
 
         async function doit(){
         var rankdata = await dbdata.find().sort({"ranks.rank": -1})
-        var top10 = rankdata.slice(0, 9)
+        var top10 = rankdata.slice(0, 10)
 
         var Embed = new RichEmbed().setTitle("Top 10 der Member Ränge")
         .setColor("RANDOM")
