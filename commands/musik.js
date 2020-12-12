@@ -67,6 +67,22 @@ module.exports = {
 			message.channel.send(embed.success("Song übersprungen", "Ich habe den aktuellen Song übersprungen"))
 		}
 
+		if (args[0].toLocaleLowerCase() == "skip"){
+			if (!musicsave[message.channel.guild.id]) return message.channel.send(embed.error_user("Keinen Player gefunden", "Mir ist kein Channel bewusst in dem ich gerade einen Song abspiele"))
+			musicsave[message.channel.guild.id].dispatcher.end();
+			message.channel.send(embed.success("Song übersprungen", "Ich habe den aktuellen Song übersprungen"))
+		}
+
+		if (args[0].toLocaleLowerCase() == "lautstärke" || args[0].toLocaleLowerCase() == "ls"){
+			if (!musicsave[message.channel.guild.id]) return message.channel.send(embed.error_user("Keinen Player gefunden", "Mir ist kein Channel bewusst in dem ich gerade einen Song abspiele"))
+			message.channel.send(embed.success("Aktuelle queue:", `\`\`\`${musicsave[message.channel.guild.id].queue.map(x => musicsave[message.channel.guild.id].queue.indexOf(x) + `. ${x.title}`).join("\n").replace(`0. ${musicsave[message.channel.guild.id].queue[0].name}`, `now playing -> ${musicsave[message.channel.guild.id].queue[0].name}`)}\`\`\``))
+		}
+
+		if (args[0].toLocaleLowerCase() == "nowplaying" || args[0].toLocaleLowerCase() == "np"){
+			if (!musicsave[message.channel.guild.id]) return message.channel.send(embed.error_user("Keinen Player gefunden", "Mir ist kein Channel bewusst in dem ich gerade einen Song abspiele"))
+			message.channel.send(embed.success("Aktueller Song:", `[${musicsave[message.channel.guild.id].queue[0].title}](${musicsave[message.channel.guild.id].queue[0].url}) von [${musicsave[message.channel.guild.id].queue[0].author}](${musicsave[message.channel.guild.id].queue[0].author_url})`))
+		}
+
 		function play(GuildId) {
 			if (musicsave[GuildId].queue.length == 0) {
 				//Leave Voicechannel if queue is empty
