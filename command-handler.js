@@ -19,7 +19,7 @@ client.on("message", (message) => {
 
     var prefix = config.prefix;
     var messageArray = message.content.split(" ")
-    var alias = messageArray[0].replace(prefix, "");
+    var alias = messageArray[0].replace(prefix, "").toLocaleLowerCase();
     var args = messageArray.slice(1);
 
     if (message.author.bot) return;
