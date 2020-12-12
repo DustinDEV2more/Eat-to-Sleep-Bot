@@ -1,6 +1,0 @@
-{
-    "discord" : "Youre Discord Bot Token",
-    "prefix"  : "command prefix",
-
-    "database": "Mongodb Database URI"
-}
