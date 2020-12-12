@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/DustinDEV2more/Eat-to-Sleep-Bot#readme",
   "dependencies": {
+    "@discordjs/opus": "^0.3.3",
     "discord.js": "^12.5.1",
-    "mongoose": "^5.11.4"
+    "mongoose": "^5.11.4",
+    "ytdl-core": "^4.1.4"
   }
 }
