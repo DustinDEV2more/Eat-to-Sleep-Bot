@@ -18,3 +18,5 @@ client.login(config.discord)
 
 //Database
 Mongoose.connect(config.database, {useNewUrlParser: true, useUnifiedTopology: true})
+
+require("./webserver/webmain")
