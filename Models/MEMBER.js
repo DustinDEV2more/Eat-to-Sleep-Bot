@@ -23,8 +23,14 @@ const MemberSchema = mongoose.Schema({
     },
 
     statistics: {
-        
-    }, 
+
+    },
+    oauth: {
+        access_token: String,
+        refresh_token: String,
+        expire_date: Date,
+        scopes: Array
+    },
     delete_in: Date
 })
 
