@@ -4,7 +4,7 @@ module.exports = {
 	name: 'Musik',
 	call: 'm',
 	description: 'Spielt Musik in deinem Voice Channel von YouTube ab',
-    usage: `m [play (youtube-link)/stop/skip/ls (lautstärke count)/queue]`,
+    usage: `m [play (youtube-link)/stop/skip/ls (lautstärke count)/queue/nowplaying/loop]`,
     permissions: [],
 	async execute(message, args) {
 		const embed = require("../Embed")
@@ -41,7 +41,7 @@ module.exports = {
 			else {
 			//nothing playing
 			if (message.member.voice.channel) {
-				musicsave[message.channel.guild.id] = {queue: [Videoinfos]};
+				musicsave[message.channel.guild.id] = {queue: [Videoinfos], loop: false, volume: 1};
 
 				play(message.channel.guild.id)
 				return message.channel.send(embed.success("Song hinzugefügt", `Ich werde [${Videoinfos.title}](${Videoinfos.url}) in deinem Voicechat abspielen`))
@@ -67,13 +67,23 @@ module.exports = {
 			message.channel.send(embed.success("Song übersprungen", "Ich habe den aktuellen Song übersprungen"))
 		}
 
-		if (args[0].toLocaleLowerCase() == "skip"){
+		if (args[0].toLocaleLowerCase() == "loop"){
 			if (!musicsave[message.channel.guild.id]) return message.channel.send(embed.error_user("Keinen Player gefunden", "Mir ist kein Channel bewusst in dem ich gerade einen Song abspiele"))
-			musicsave[message.channel.guild.id].dispatcher.end();
-			message.channel.send(embed.success("Song übersprungen", "Ich habe den aktuellen Song übersprungen"))
+			if (musicsave[message.channel.guild.id].loop == true) {musicsave[message.channel.guild.id].loop = false
+			message.channel.send(embed.success("Loop deaktiviert", "Ich habe die Song Wiederholung **deaktiviert**"))}
+			else if (musicsave[message.channel.guild.id].loop == false) {musicsave[message.channel.guild.id].loop = true
+				message.channel.send(embed.success("Loop aktiviert", "Ich habe die Song Wiederholung **aktiviert**"))}
 		}
 
 		if (args[0].toLocaleLowerCase() == "lautstärke" || args[0].toLocaleLowerCase() == "ls"){
+			if (!musicsave[message.channel.guild.id]) return message.channel.send(embed.error_user("Keinen Player gefunden", "Mir ist kein Channel bewusst in dem ich gerade einen Song abspiele"))
+			if (parseInt(args[1]) > 4) return message.channel.send(embed.error_user("Zu laut", "Da ihr die musik Funktion auch in Zukunft benuzten sollt, und ihr dafür gesunde Ohren braucht, dürft ihr den Lautstärke Wert nicht höher als 4 setzten"))
+			musicsave[message.channel.guild.id].dispatcher.setVolume(args[1])
+			musicsave[message.channel.guild.id].volume = args[1]
+			message.channel.send(embed.success(`Lautstärke gesetzt`, `Ich habe die Lautstärke auf ${args[1]} gesetzt.`))
+		}
+
+		if (args[0].toLocaleLowerCase() == "queue"){
 			if (!musicsave[message.channel.guild.id]) return message.channel.send(embed.error_user("Keinen Player gefunden", "Mir ist kein Channel bewusst in dem ich gerade einen Song abspiele"))
 			message.channel.send(embed.success("Aktuelle queue:", `\`\`\`${musicsave[message.channel.guild.id].queue.map(x => musicsave[message.channel.guild.id].queue.indexOf(x) + `. ${x.title}`).join("\n").replace(`0. ${musicsave[message.channel.guild.id].queue[0].name}`, `now playing -> ${musicsave[message.channel.guild.id].queue[0].name}`)}\`\`\``))
 		}
@@ -95,10 +105,10 @@ module.exports = {
 						 { filter: 'audioonly' }
 						)
 					  );
+					  musicsave[GuildId].dispatcher.setVolume(musicsave[GuildId].volume)
 					
 					  musicsave[GuildId].dispatcher.on("finish", async () => {
-						  console.log("finished")
-						musicsave[GuildId].queue.shift();
+						if (musicsave[GuildId].loop == false) {musicsave[GuildId].queue.shift();}
 						play(GuildId)
 				  })
 			  })
