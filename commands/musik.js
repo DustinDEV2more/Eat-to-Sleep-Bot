@@ -4,11 +4,13 @@ module.exports = {
 	name: 'Musik',
 	call: 'm',
 	description: 'Spielt Musik in deinem Voice Channel von YouTube ab',
-    usage: `m [play (youtube-link)/stop/skip/ls (lautstärke count)/queue/nowplaying/loop]`,
+    usage: `m <[play <youtube-link>/playlist <youtube-playlist-link>/stop/skip/ls <lautstärke 0-4>/queue/nowplaying/loop]>`,
     permissions: [],
 	async execute(message, args) {
+		var config = require("../config.json")
 		const embed = require("../Embed")
 		const ytdl = require('ytdl-core');
+		const fetch = require('node-fetch');
 		const OLDMEMBER = require("../Models/OLD-MEMBER")
 
 		const mdata = await OLDMEMBER.findOne({"info.id": message.author.id})
@@ -45,6 +47,59 @@ module.exports = {
 
 				play(message.channel.guild.id)
 				return message.channel.send(embed.success("Song hinzugefügt", `Ich werde [${Videoinfos.title}](${Videoinfos.url}) in deinem Voicechat abspielen`))
+
+				} 
+				  
+				else {
+				message.channel.send(embed.error_user("Kein Voice Channel", "Du musst dich in einem Voicechannel befinden damit ich Musik spielen kann"));
+				}
+			}
+		}
+
+		if (args[0].toLocaleLowerCase() == "playlist"){
+			if (!args[1]) return message.channel.send(embed.error_user("Keine Playlist angegeben", "Du musst einen YouTube Video Link angeben"))
+			
+			var playlistid = args[1].split("?list=")
+
+			//Fetch Song Infoinformation
+			var playlist_videos = await fetch(`https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistid.slice(-1)[0]}&key=${config.youtube_api.key}`).then(res => res.json())
+			console.log(playlist_videos.items[0].snippet.resourceId.videoId)
+
+			//check if bot is already playing a song in that server
+			if (musicsave[message.channel.guild.id]){
+				//already playing				
+				playlist_videos.items.forEach(async video => {
+					var Videoinfos = {
+					title: video.snippet.title,
+					url: "https://www.youtube.com/watch?v=" + video.snippet.resourceId.videoId,
+					author: video.snippet.channelTitle,
+					author_url: "https://www.youtube.com/channel/" + video.snippet.channelId,
+					video_lenght: null
+				}
+					musicsave[message.channel.guild.id].queue.push(Videoinfos);
+					});
+
+				return message.channel.send(embed.success("Playlist hinzugefügt", `Ich habe **${playlist_videos.items.length} Videos** zur queue hinzugefügt`))
+			
+			}
+			else {
+			//nothing playing
+			if (message.member.voice.channel) {
+				musicsave[message.channel.guild.id] = {queue: [], loop: false, volume: 1};
+
+				playlist_videos.items.forEach(async video => {
+					var Videoinfos = {
+					title: video.snippet.title,
+					url: "https://www.youtube.com/watch?v=" + video.snippet.resourceId.videoId,
+					author: video.snippet.channelTitle,
+					author_url: "https://www.youtube.com/channel/" + video.snippet.channelId,
+					video_lenght: null
+				}
+					musicsave[message.channel.guild.id].queue.push(Videoinfos);
+					});
+
+				play(message.channel.guild.id)
+				return message.channel.send(embed.success("Playlist hinzugefügt", `Ich werde **${playlist_videos.items.length} Videos** in deinem Voicechannel abspielen`))
 
 				} 
 				  
