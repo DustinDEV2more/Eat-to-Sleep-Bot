@@ -1,7 +1,8 @@
 var { client } = require("./index")
-const {MessageEmbed} = require("discord.js")
 var config = require("./config.json")
 const fs = require("fs")
+const embed = require("./Embed")
+
 
 //read command folder
 var commanddir = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -31,7 +32,7 @@ client.on("message", (message) => {
         client.commands.get(alias).execute(message, args);
     } catch (error) {
         console.error(error);
-        message.channel.send(new MessageEmbed().setColor("RED").setTitle("Ein Fehler ist aufgetreten!").setDescription(`Keine Sorge. Ziemlich warscheinlich ist es nicht deine Schuld\n\`\`\`fix\n${error}\`\`\``));
+        message.channel.send(embed.error_system("Ein Fehler beim Ausführen des Befehls ist aufgetreten", "```" + error + "```"));
     }
 
 })
