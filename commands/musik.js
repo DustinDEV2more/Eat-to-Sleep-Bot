@@ -1,6 +1,5 @@
 var musicsave = []
-
-module.exports = {
+exports.command = {
 	name: 'Musik',
 	call: 'm',
 	description: 'Spielt Musik in deinem Voice Channel von YouTube ab',
@@ -63,7 +62,6 @@ module.exports = {
 
 			//Fetch Song Infoinformation
 			var playlist_videos = await fetch(`https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistid.slice(-1)[0]}&key=${config.youtube_api.key}`).then(res => res.json())
-			console.log(playlist_videos.items[0].snippet.resourceId.videoId)
 
 			//check if bot is already playing a song in that server
 			if (musicsave[message.channel.guild.id]){
@@ -87,6 +85,7 @@ module.exports = {
 			if (message.member.voice.channel) {
 				musicsave[message.channel.guild.id] = {queue: [], loop: false, volume: 1};
 
+				console.log(playlist_videos.items[0])
 				playlist_videos.items.forEach(async video => {
 					var Videoinfos = {
 					title: video.snippet.title,
@@ -140,7 +139,11 @@ module.exports = {
 
 		if (args[0].toLocaleLowerCase() == "queue"){
 			if (!musicsave[message.channel.guild.id]) return message.channel.send(embed.error_user("Keinen Player gefunden", "Mir ist kein Channel bewusst in dem ich gerade einen Song abspiele"))
-			message.channel.send(embed.success("Aktuelle queue:", `\`\`\`${musicsave[message.channel.guild.id].queue.map(x => musicsave[message.channel.guild.id].queue.indexOf(x) + `. ${x.title}`).join("\n").replace(`0. ${musicsave[message.channel.guild.id].queue[0].name}`, `now playing -> ${musicsave[message.channel.guild.id].queue[0].name}`)}\`\`\``))
+			var embedtxt = `\`\`\`${musicsave[message.channel.guild.id].queue.map(x => musicsave[message.channel.guild.id].queue.indexOf(x) + `. ${x.title}`).join("\n").replace(`0. ${musicsave[message.channel.guild.id].queue[0].title}`, ``)}\`\`\``
+			if (embedtxt.length > 2048){ embedtxt = `Die Queue ist zu lang für eine Discord Message. Du kannst sie allerdings [hier ansehen](http://server.dustin-dm.de:7869/api/music/${message.channel.guild.id}/queue)`}
+
+
+			message.channel.send(embed.success("Aktuelle queue:", embedtxt))
 		}
 
 		if (args[0].toLocaleLowerCase() == "nowplaying" || args[0].toLocaleLowerCase() == "np"){
@@ -171,3 +174,14 @@ module.exports = {
 		}
 	},
 };
+
+const express = require("express");
+const app = express.Router();
+
+app.use("/:guildid/queue", (req, res) => {
+	 if (!musicsave[req.query.guildid]) return res.status(400).send({"error": "No queue availible"})
+	 		res.send(musicsave[req.params.guildid].queue)
+	
+})
+
+exports.api = app;

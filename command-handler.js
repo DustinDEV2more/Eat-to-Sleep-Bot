@@ -10,7 +10,7 @@ var commanddir = fs.readdirSync('./commands').filter(file => file.endsWith('.js'
 //save every file to the client.commands 
 for (const file of commanddir) {
     
-    var command = require("./commands/" + file)
+    var command = require("./commands/" + file).command
     client.commands.set(command.call, command);
 
 }
