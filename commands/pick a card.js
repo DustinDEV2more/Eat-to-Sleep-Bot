@@ -7,7 +7,6 @@ module.exports = {
         const { client, config} = require('../index')
         const { RichEmbed } = require('discord.js')
         const colour = require("../colours.json")
-        var AsciiTable = require('ascii-table')
 
 
         var dbdata = require("../models/MEMBER")
@@ -23,8 +22,7 @@ module.exports = {
         var deck = [false, false, false]
 
         var random = Math.floor(Math.random() * deck.length)
-        // if (random > 2) {random = 2}
-        // if (random < 0) {random = 0}
+
         deck[random] = true
 
 
@@ -47,7 +45,8 @@ module.exports = {
 
                 //User Picks Ass
                 if (votetfor - 1 == Ass){
-                        await dbdata.findOneAndUpdate({"info.id": message.member.id}, {"coins.amount": memberdb.coins.amount + einsatz * 1.5})
+			var finaler_wert = einsatz * 1.5 - einsatz
+                        await dbdata.findOneAndUpdate({"info.id": message.member.id}, {"coins.amount": memberdb.coins.amount + finaler_wert})
                         msg.edit(new RichEmbed().setColor("#f1c40f").setTitle(`Du hast das Ass gezogen. Dein Einsatz von **${einsatz}**<:EatSleepCoin:725823305008939058> wurde auf **${einsatz * 1.5}** erhöht`))
                 }
                 else {        await dbdata.findOneAndUpdate({"info.id": message.member.id}, {"coins.amount": memberdb.coins.amount - einsatz})
