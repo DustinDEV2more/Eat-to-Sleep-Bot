@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
+
+* {
+    font-family: 'Ubuntu', sans-serif;
+    padding: 0px;
+    margin: 0px;
+    color: white;
+}
+
+body {
+    background-color: #2C2F33;
+}
+
+.card {
+    display:flex;
+    align-items:center;
+}
+
+.logentry {
+    display:flex;
+    align-items:center;
+}
+
+.name {
+    display:flex;
+    align-items:center;    
+}
+
+.amount {
+    display:flex;
+    align-items:center;    
+}
+
+.tag {margin-left: 10px;
+background-color: #7289DA;
+border-radius: 7%;
+padding: 3px;
+}
+
+.infos {
+    padding-left: 30px;
+}
+
+.coinssymbol img {
+    width: 35px;
+}
+
+.logentry img {
+    width: 25px;
+}
+
+.profilepicture img {
+border-radius: 50%;
+width: 200px;
+display: block;
+margin-top: 25px;
+margin-left: 20px;
+}
+

@@ -2,6 +2,7 @@ const mongoose = require("mongoose")
 
 const MemberSchema = mongoose.Schema({
     id: {required: true, type: String},
+    type: {default: "member", type: String},
 
     currencys:{
         ranks: {

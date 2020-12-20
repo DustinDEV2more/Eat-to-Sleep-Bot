@@ -27,6 +27,7 @@
     "express-ejs-layouts": "^2.5.0",
     "mongoose": "^5.11.4",
     "node-fetch": "^2.6.1",
+    "puppeteer": "^5.5.0",
     "ytdl-core": "^4.1.5"
   }
 }

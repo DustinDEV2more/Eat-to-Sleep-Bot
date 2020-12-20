@@ -20,6 +20,20 @@ app.use("/discord", discord_oauth)
 const interface = require("./routes/webinterface")
 app.use("/webinterface", interface)
 
+app.get("/coins/:id", async (req, res) => {
+    var MEMBER = require("../Models/MEMBER")
+    var discordclient = require("../index").client
+    var mdb = await MEMBER.findOne({"id": req.params.id})
+    if (!mdb) return res.send("DB INDEX not found")
+    mdb.currencys.coins.log = mdb.currencys.coins.log.reverse()
+
+    discordclient.guilds.cache.get("585511241628516352").members.fetch(mdb.id).then(m => {
+    
+    res.render("coincard", {raw: true, member: mdb, pb: m.user.displayAvatarURL() + "?size=2048", tag: m.user.tag})
+    })
+
+})
+
 app.listen(7869, () => {
     console.log("Webserver is active and listenig on 7869")
 })

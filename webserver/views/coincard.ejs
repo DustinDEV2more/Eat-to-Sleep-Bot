@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <link href="/css/coincard.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="card">
+    <div class="profilepicture"><img src="<%= pb %>" alt="Profile Picture"></div>
+
+    <div class="infos">
+        <div class="name">
+            <h1><%= tag %></h1>
+            <div class="tag"><h2><%= member.type %></h2></div>
+        </div>
+        
+        <div class="amount"><h2>coins: <%= member.currencys.coins.amount %></h2>
+        <div class="coinssymbol"><img src="/src/esc.png" alt="Eat Sleep coin Icon"></div>
+        </div>
+
+        <div class="log">
+            <h3 style="margin-bottom: 10px;">Buchungen:</h3>
+            <% member.currencys.coins.log.slice(0, 3).forEach(l => { %>
+                <div class="logentry">
+            <% if (l.value > -1){ %>
+            <p style="color: greenyellow;"><%= l.description %>: <%= l.value %> </p> <img src="/src/esc.png" alt="Eat Sleep coin Icon">
+            <% } %> 
+            <% if (l.value < 0){ %>
+                <p style="color: red;"><%= l.description %>: <%= l.value %> </p> <img src="/src/esc.png" alt="Eat Sleep coin Icon">
+                <% } %>
+        </div>
+           <% }); %> 
+        </div>
+    </div>
+</div>
+</body>
+</html>
