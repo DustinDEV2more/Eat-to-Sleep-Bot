@@ -34,6 +34,20 @@ app.get("/coins/:id", async (req, res) => {
 
 })
 
+app.get("/rank/:id", async (req, res) => {
+    var MEMBER = require("../Models/MEMBER")
+    var discordclient = require("../index").client
+    var mdb = await MEMBER.findOne({"id": req.params.id})
+    if (!mdb) return res.send("DB INDEX not found")
+    mdb.currencys.ranks.nextxp = 10 * mdb.currencys.ranks.rank / 10 * 5; 
+
+    discordclient.guilds.cache.get("585511241628516352").members.fetch(mdb.id).then(m => {
+    
+    res.render("rankcard", {raw: true, member: mdb, pb: m.user.displayAvatarURL() + "?size=2048", tag: m.user.tag})
+    })
+
+})
+
 app.listen(7869, () => {
     console.log("Webserver is active and listenig on 7869")
 })

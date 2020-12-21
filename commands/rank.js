@@ -1,8 +1,8 @@
 exports.command = {
-	name: 'coin abfrage',
-	call: 'coins',
-	description: 'Gibt dir Informationen über deinen Kontostand und über deine letzten ausgaben',
-    usage: `coins [user#1234]`,
+	name: 'rank abfrage',
+	call: 'rank',
+	description: 'Gibt dir Informationen über deinen aktuellen rank',
+    usage: `rank [@user]`,
     permissions: [],
 	async execute(message, args) {
         const Discord = require('discord.js');
@@ -25,11 +25,11 @@ exports.command = {
             const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
             const page = await browser.newPage();
             page.setViewport(viewport)
-            await page.goto("http://localhost:7869/coins/" + user, {
+            await page.goto("http://localhost:7869/rank/" + user, {
                 waitUntil: 'networkidle0', // Wait until the network is idle
             });
             var screenshot = await page.screenshot();
-            const attachment = new Discord.MessageAttachment(screenshot, `Coincard von ${user}.png`);
+            const attachment = new Discord.MessageAttachment(screenshot, `Rankcard von ${user}.png`);
             message.channel.send(attachment)
           
             await browser.close();

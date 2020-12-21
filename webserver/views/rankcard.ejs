@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <link href="/css/rankcard.css" rel="stylesheet">
+</head>
+<body>
+
+<div class="card">
+    <div class="profilepicture"><img src="<%= pb %>" alt="Profile Picture"></div>
+
+    <div class="infos">
+        <div class="name">
+            <h1><%= tag %></h1>
+            <div class="tag"><h2><%= member.type %></h2></div>
+        </div>
+        
+        <div class="rank">
+            <h2>rank: <%= member.currencys.ranks.rank %></h2>
+            <h3>xp: <%= member.currencys.ranks.xp %> / <%= member.currencys.ranks.nextxp %></h3>
+
+            <progress value="<%= member.currencys.ranks.xp %>" max="<%= member.currencys.ranks.nextxp %>"><%= member.currencys.ranks.xp %>  %</progress>
+        </div>
+
+        
+    </div>
+</div>
+</body>
+</html>
