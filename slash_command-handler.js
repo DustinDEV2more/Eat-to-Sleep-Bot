@@ -33,7 +33,7 @@ for (const file of commanddir) {
     var command = require("./commands/slash/" + file).command
     client.slash_commands.set(command.name, command);
 
-    client.api.applications(client.user.id).guilds("604747271862485012").commands.post({
+    client.api.applications(client.user.id).commands.post({
         data: {
             name: command.name,
             description: command.description,
