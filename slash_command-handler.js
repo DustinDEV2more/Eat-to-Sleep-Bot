@@ -18,6 +18,12 @@ async function createAPIMessage(int, content) {
 return {...apimessage.data, files: apimessage.files}
 }
 
+async function sendembed(int, content) {
+    client.api.interactions(int.id, int.token).callback.post({
+        data: {type: 4, data: await createAPIMessage(int, content)}
+    })
+}
+
 //read command folder
 var commanddir = fs.readdirSync('./commands/slash').filter(file => file.endsWith('.js'));
 
@@ -49,7 +55,7 @@ client.ws.on("INTERACTION_CREATE", async int => {
     if (!client.slash_commands.has(command)) return;
 
     try {
-        client.slash_commands.get(command).execute(int, args, createAPIMessage, client);
+        client.slash_commands.get(command).execute(int, args, sendembed, client);
     } catch (error) {
         console.error(error);
     

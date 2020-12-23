@@ -6,6 +6,7 @@ var config = require("./config.json")
 var client = new Discord.Client();
 client.commands = new Discord.Collection()
 client.slash_commands = new Discord.Collection()
+client.music = new Discord.Collector()
 module.exports.client = client;
 
 require("./command-handler")
@@ -19,7 +20,7 @@ client.on("ready", () => {
 client.login(config.discord)
 
 //Database
-Mongoose.connect(config.database, {useNewUrlParser: true, useUnifiedTopology: true})
+Mongoose.connect(config.database, {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
 
 
 require("./webserver/webmain")

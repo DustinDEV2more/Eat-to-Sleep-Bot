@@ -1,14 +1,14 @@
 exports.command = {
 	name: 'daily',
-	description: 'COINS',
+	description: 'Gibt dir aller 24 Stunden Coins',
     roles: [],
 
     options: [],
-	async execute(message, args) {
-		const embed = require("../Embed")
-        const MEMBER = require("../Models/MEMBER")
+	async execute(int, args, send, client) {
+		const embed = require("../../Embed")
+        const MEMBER = require("../../Models/MEMBER")
         
-        var memberdb = await MEMBER.findOne({"id": message.member.id})
+        var memberdb = await MEMBER.findOne({"id":int.member.user.id})
         if (!memberdb) return;
 
         var datenow = new Date()
@@ -18,13 +18,15 @@ exports.command = {
             var newlog = memberdb.currencys.coins.log
             newlog.push({"description": "daily coins", "value": 150, "date": datenow})
 
-           await MEMBER.findOneAndUpdate({"id": message.member.id}, {"currencys.coins.amount": memberdb.currencys.coins.amount + 150, "currencys.coins.last_daily": datenow, "currencys.coins.log": newlog})
-           message.channel.send(embed.success("Tägliche Belohnung eingelöst", "Deine Tägliche Belohnung wurde eingelöst. Ich habe 150<:EatSleepCoin:725823305008939058> zu deinem Account hinzugefügt"))
-        }
+           await MEMBER.findOneAndUpdate({"id": int.member.user.id}, {"currencys.coins.amount": memberdb.currencys.coins.amount + 150, "currencys.coins.last_daily": datenow, "currencys.coins.log": newlog})
+            send(int, embed.success("Tägliche Belohnung eingelöst", "Deine Tägliche Belohnung wurde eingelöst. Ich habe 150 Coins zu deinem Account hinzugefügt"))
+    
+    }
         else {
             //last daily was redeemed within the last 24 hours
-            message.channel.send(embed.error_user("Tägliche Belohnung bereits eingelöst", `Du hast deine tägliche Belohnung bereits eingelöst`))
-        }
+            send(int, embed.error_user("Tägliche Belohnung bereits eingelöst", `Du hast deine tägliche Belohnung bereits eingelöst`))}
+                
+        
 
     },
 };
