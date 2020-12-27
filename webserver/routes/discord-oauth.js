@@ -8,11 +8,10 @@ const MEMBER = require("../../Models/MEMBER")
 const app = express.Router();
 
 app.get("/", (req, res) => {
-    res.redirect(`https://discord.com/api/oauth2/authorize?response_type=code&client_id=${config.discord_api.client_id}&scope=${"identify email"}&redirect_uri=${"http://localhost:7869/discord/redirect"}`)
+    res.redirect(`https://discord.com/api/oauth2/authorize?response_type=code&client_id=${config.discord_api.client_id}&scope=${"identify email"}&redirect_uri=${`${req.protocol}://${req.headers.host}/discord/redirect`}`)
 })
 
 app.get("/redirect", async (req, res) => {
-    //res.redirect(`https://discord.com/api/oauth2/authorize?response_type=code&client_id=${config.discord_api.client_id}&scope=${"identify email"}&redirect_uri=${"http://localhost:7869/discord/redirect"}`)
     
     const oauth = new DiscordOauth2();
     var code = req.query.code
@@ -25,7 +24,7 @@ app.get("/redirect", async (req, res) => {
         scope: "identify email",
         grantType: "authorization_code",
         
-        redirectUri: "http://localhost:7869/discord/redirect",
+        redirectUri: `${req.protocol}://${req.headers.host}/discord/redirect`,
     }).then(code => {
         //get loged in user informations
 
