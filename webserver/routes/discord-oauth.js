@@ -17,6 +17,7 @@ app.get("/redirect", async (req, res) => {
     const oauth = new DiscordOauth2();
     var code = req.query.code
 
+    //exchange login page code to token
     oauth.tokenRequest({
         clientId: config.discord_api.client_id,
         clientSecret: config.discord_api.client_secret,
@@ -30,17 +31,23 @@ app.get("/redirect", async (req, res) => {
         //get loged in user informations
 
         fetch("https://discord.com/api/users/@me", {headers: {Authorization: `Bearer ${code.access_token}`}}).then(res => res.json()).then(async userinfo => {
-            //Check if user is in db
+            //generate database entry
             var expire_date = new Date()
             expire_date.setSeconds(expire_date.getSeconds() + code.expires_in)
+            //login token for cookie
             var login = nanoid(64)
 
+            //get db entry
             var memberdb = await MEMBER.findOne({"id": userinfo.id})
+            //push cookie data login to database element
             memberdb.oauth.cookies.push({code: login})
-            if (5 < memberdb.oauth.cookies.length) {memberdb.oauth.cookies.shift()}
+            if (5 < memberdb.oauth.cookies.length) {memberdb.oauth.cookies.shift()} //remove first cookie if there are already 5
 
-            if (!memberdb) return res.send("Login nicht möglich. Du bist nicht auf dem Eat, Sleep, Nintendo, Repeat Server")
+            if (!memberdb) return res.send("Login nicht möglich. Du bist nicht auf dem Eat, Sleep, Nintendo, Repeat Server")//send error if member is not in database
+            //save to db
             await MEMBER.findOneAndUpdate({"id": userinfo.id}, {"oauth": {"access_token": code.access_token, "refresh_token": code.refresh_token, "expire_date": expire_date, "scopes": code.scope.split(" "), "cookies": memberdb.oauth.cookies}})
+            
+            //save cookie token to the cookies
             res.cookie("login", login)
 
 
@@ -50,7 +57,7 @@ app.get("/redirect", async (req, res) => {
 
 
 
-    }).catch(e => res.redirect("/discord"))
+    }).catch(e => res.redirect("/discord")) //promt user again to the login page if something didnt work
 })
 
 
