@@ -30,7 +30,8 @@ const MemberSchema = mongoose.Schema({
         access_token: String,
         refresh_token: String,
         expire_date: Date,
-        scopes: Array
+        scopes: Array,
+        cookies: Array
     },
     delete_in: Date
 })
