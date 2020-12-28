@@ -51,9 +51,13 @@ app.get("/redirect", async (req, res) => {
             res.cookie("login", login, { expires: expire_date})
 
 
-            // return res.send(`Login von ${userinfo.username}#${userinfo.discriminator} mit der Email "${userinfo.email}" war erfolgreich! Zum aktuellen Zeitpunkt werden keine Daten von dir erhoben. Alles was hier angezeigt wird, wird aktuell nicht auf des Servern oder in der Database von eat, sleep nintendo, repeat hinterlegt`)
+            //redirect user to page from before the login promt
+            if(req.cookies.redirect){
             res.clearCookie("redirect")
             res.redirect(req.cookies.redirect)
+            }
+            //redirect user to /webinterface if no redirect cookie was set
+            else {res.redirect("/webinterface")}
         })
 
 
