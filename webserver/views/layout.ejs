@@ -3,12 +3,40 @@
 <!DOCTYPE html>
 <html lang=de>
     <head>
+        <meta name="viewport" content="width=device-width, 
+        initial-scale=1.0, 
+        maximum-scale=1.0, 
+        user-scalable=no">
+        <link href="/css/style.css" rel="stylesheet">
         <title>Eat, Sleep, Nintendo, Repeat</title>
     </head>
 
+    <header>
+        <nav>
+            <div class="logo">
+                <h1 href="/webinterface">Eat, Sleep, Nintendo, Repeat</h1>
+            </div>
+
+            <ul class="nav-links">
+                <li><div class="usercard">
+                    <img src="/src/default-pb.jpg" alt="profile-picture">
+                    <a href="/webinterface/user">loading#0000</a>
+                </div></li>
+                <li><a href="/webinterface">Home</a></li>
+                <li><a href="/webinterface/shop">Shop</a></li>
+                <li><a href="/webinterface/admin">Admin</a></li>
+            </ul>
+            <div class="burger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </nav>
+    </header>
 
     <body>
         <%- body %>
+        <script src="/js/header.js"></script>
     </body>
 </html>
 

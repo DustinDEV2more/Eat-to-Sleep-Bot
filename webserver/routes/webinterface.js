@@ -12,14 +12,14 @@ app.use("/", (req, res, next) => {
 })
 
 
-app.use("/test", (req, res) => {
+app.get("/test", (req, res) => {
     res.send("nice")
 })
 
 
 
 app.use("*", (req, res) => {
-    res.status(404).render("404", {raw: true})
+    res.status(404).render("404", {raw: false})
 })
 
 
