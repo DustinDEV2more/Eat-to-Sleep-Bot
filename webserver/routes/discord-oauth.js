@@ -48,11 +48,12 @@ app.get("/redirect", async (req, res) => {
             await MEMBER.findOneAndUpdate({"id": userinfo.id}, {"oauth": {"access_token": code.access_token, "refresh_token": code.refresh_token, "expire_date": expire_date, "scopes": code.scope.split(" "), "cookies": memberdb.oauth.cookies}})
             
             //save cookie token to the cookies
-            res.cookie("login", login)
+            res.cookie("login", login, { expires: expire_date})
 
 
-            return res.send(`Login von ${userinfo.username}#${userinfo.discriminator} mit der Email "${userinfo.email}" war erfolgreich! Zum aktuellen Zeitpunkt werden keine Daten von dir erhoben. Alles was hier angezeigt wird, wird aktuell nicht auf des Servern oder in der Database von eat, sleep nintendo, repeat hinterlegt`)
-            
+            // return res.send(`Login von ${userinfo.username}#${userinfo.discriminator} mit der Email "${userinfo.email}" war erfolgreich! Zum aktuellen Zeitpunkt werden keine Daten von dir erhoben. Alles was hier angezeigt wird, wird aktuell nicht auf des Servern oder in der Database von eat, sleep nintendo, repeat hinterlegt`)
+            res.clearCookie("redirect")
+            res.redirect(req.cookies.redirect)
         })
 
 

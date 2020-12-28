@@ -1,12 +1,25 @@
 const express = require("express");
-
-
+const { ConnectionStates } = require("mongoose");
 const app = express.Router();
 
+//check if user has loged in with 
+app.use("/", (req, res, next) => {
+    if (!req.cookies.login){
+        
+    res.cookie("redirect", req.originalUrl)
+    return res.redirect("/discord")}
+    next();
+})
 
 
-app.use("/music/:guildid", (req, res) => {
-    res.render("music.ejs")
+app.use("/test", (req, res) => {
+    res.send("nice")
+})
+
+
+
+app.use("*", (req, res) => {
+    res.status(404).render("404", {raw: true})
 })
 
 
