@@ -40,15 +40,15 @@ app.get("/redirect", async (req, res) => {
             //get db entry
             var memberdb = await MEMBER.findOne({"id": userinfo.id})
             //push cookie data login to database element
-            memberdb.oauth.cookies.push({code: login})
+            memberdb.oauth.cookies.push({token: login})
             if (5 < memberdb.oauth.cookies.length) {memberdb.oauth.cookies.shift()} //remove first cookie if there are already 5
 
             if (!memberdb) return res.send("Login nicht möglich. Du bist nicht auf dem Eat, Sleep, Nintendo, Repeat Server")//send error if member is not in database
             //save to db
-            await MEMBER.findOneAndUpdate({"id": userinfo.id}, {"oauth": {"access_token": code.access_token, "refresh_token": code.refresh_token, "expire_date": expire_date, "scopes": code.scope.split(" "), "cookies": memberdb.oauth.cookies}})
+            await MEMBER.findOneAndUpdate({"id": userinfo.id}, {"oauth": {"access_token": code.access_token, "refresh_token": code.refresh_token, "expire_date": expire_date, "scopes": code.scope.split(" "),"redirect": `${req.protocol}://${req.headers.host}/discord/redirect`,"cookies": memberdb.oauth.cookies}})
             
             //save cookie token to the cookies
-            res.cookie("login", login, { expires: expire_date})
+            res.cookie("token", login, { expires: expire_date})
 
 
             //redirect user to page from before the login promt

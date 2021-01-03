@@ -3,6 +3,7 @@ const express = require('express')
 const bodyParser = require('body-parser');
 var expressLayouts = require('express-ejs-layouts');
 var cookieParser = require('cookie-parser');
+var cors = require('cors')
 
 
 const app = express()
@@ -15,7 +16,7 @@ app.use(bodyParser.json());
 app.use(cookieParser())
 
 const api = require("./routes/api")
-app.use("/api", api)
+app.use("/api", cors(), api)
 
 const discord_oauth = require("./routes/discord-oauth")
 app.use("/discord", discord_oauth)

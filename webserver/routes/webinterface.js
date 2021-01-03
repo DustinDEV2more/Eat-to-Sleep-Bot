@@ -4,7 +4,7 @@ const app = express.Router();
 
 //check if user has loged in with 
 app.use("/", (req, res, next) => {
-    if (!req.cookies.login){
+    if (!req.cookies.token){
         
     res.cookie("redirect", req.originalUrl)
     return res.redirect("/discord")}

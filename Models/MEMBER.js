@@ -2,7 +2,7 @@ const mongoose = require("mongoose")
 
 const MemberSchema = mongoose.Schema({
     id: {required: true, type: String},
-    type: {default: "member", type: String},
+    type: {default: 0, type: Number},
 
     currencys:{
         ranks: {
@@ -31,6 +31,7 @@ const MemberSchema = mongoose.Schema({
         refresh_token: String,
         expire_date: Date,
         scopes: Array,
+        redirect: String,
         cookies: Array
     },
     delete_in: Date

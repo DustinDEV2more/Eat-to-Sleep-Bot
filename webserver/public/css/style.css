@@ -7,6 +7,18 @@
     box-sizing: border-box;
 }
 
+#text {
+    display: none;
+}
+
+body {
+    background-color: #2C2F33;
+}
+
+body * {
+    color: rgb(236, 236, 236);
+}
+
 header nav {
     display: flex; /*nebeneinander*/
     justify-content: space-around;
@@ -14,6 +26,7 @@ header nav {
     min-height: 50px;
 
     background-color: #7289DA;
+    /* background-image: linear-gradient(to right, #FF0000 0%, #AD00FF 100%); */
 }
 
 .logo {
@@ -86,7 +99,7 @@ header nav {
         position: absolute;
         right: 0%;
         height: 150px;
-        top: 5.5vh;
+        top: 7.9vh;
         background-color: #7289DA;
         display: flex;
         flex-direction: column;
