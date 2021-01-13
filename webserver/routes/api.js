@@ -5,10 +5,11 @@ const DiscordOauth2 = require("discord-oauth2");
 const config = require("../../config.json");
 const cookieParser = require("cookie-parser");
 const { response } = require("express");
+const { ConnectionStates } = require("mongoose");
 
 const app = express.Router();
 
-//checking if request is Authorized
+//checking if request has a token and checks if token has a assoziated user --> cache for 1 hour
 var cookie_token_cache = [];
 app.use("/", async (req, res, next) => {
     var cookie_token = req.cookies.token
@@ -36,11 +37,14 @@ app.use("/", async (req, res, next) => {
     }
 })
 
-app.use("/user", async (req, res) => {
+//verifys if user has a vallid discord oauth session
+var discord_oauth_cache = [];
+app.use("/userauth", async (req, res) => {
     var cookie_token = req.cookies.token
     var memberdb = await MEMBER.findOne({"oauth.cookies.token": cookie_token})
     if (!memberdb) return res.status(401).send({"error": "Unauthorized - cookie not valid"});
-    
+
+    if (discord_oauth_cache.find(x => x.cookie_token == cookie_token)) return res.send(discord_oauth_cache.find(x => x.cookie_token == cookie_token).data);
     //verify if Discord oauth access_token is still valid
         //check if token is natually expiered
         if (memberdb.oauth.expire_date < new Date()){
@@ -65,12 +69,19 @@ app.use("/user", async (req, res) => {
         }
         else {
         //get Information from Discord Servers
-        fetch("https://discord.com/api/users/@me", {headers: {Authorization: `Bearer ${memberdb.oauth.access_token}`}}).then(discord_res => discord_res.json()).then(json => {
+        fetch("https://discord.com/api/users/@me", {headers: {Authorization: `Bearer ${memberdb.oauth.access_token}`}}).then(discord_res => discord_res.json()).then(async json => {
             if (json.message == "401: Unauthorized"){
                 return res.status(511).send({"error": "Unauthorized by Discord - Discord didnt allowed this Server to get Information about a User"});
             }
             if (json.id != undefined){
-                return res.send({"name": json.username + "#" + json.discriminator, "avatar": `https://cdn.discordapp.com/avatars/${json.id}/${json.avatar}.png`})
+                //save data to cache
+                discord_oauth_cache.push({cookie_token, data: {"name": json.username + "#" + json.discriminator, "avatar": `https://cdn.discordapp.com/avatars/${json.id}/${json.avatar}.png`, type: memberdb.type}});
+                setTimeout(() => {
+                    discord_oauth_cache.pop();
+                }, 1800000);
+
+                await MEMBER.findOneAndUpdate({"id": memberdb.id}, {informations: {name: json.username, discriminator: json.discriminator, avatar: json.avatar}})
+                return res.send({"name": json.username + "#" + json.discriminator, "avatar": `https://cdn.discordapp.com/avatars/${json.id}/${json.avatar}.png`, type: memberdb.type})
             }
             else {
                 return res.status(500).send({"error": "Discord Error - Something is wrong with the Discord Server response"});
@@ -78,6 +89,39 @@ app.use("/user", async (req, res) => {
         })
 
         }
+})
+
+//member informations
+app.use("/user/:id", async (req, res) => {
+    var cookie_token = req.cookies.token
+    var memberid = req.params.id
+    var memberdb = null
+    if (memberid == "@me"){
+        memberdb = await MEMBER.findOne({"oauth.cookies.token": cookie_token})}
+    else {memberdb = await MEMBER.findOne({"id": memberid})}
+
+    if (!memberdb) return res.status(404).send({"error": "404 - cant find user"});
+
+    var returnobjekt = {
+        id: memberdb.id,
+        name: memberdb.informations.name,
+        discriminator: memberdb.informations.discriminator,
+        avatar: memberdb.informations.avatar,
+
+        coins: {amount: memberdb.currencys.coins.amount},
+        ranks: memberdb.currencys.ranks,
+        warnings: memberdb.warnings,
+        stats: memberdb.statistics,
+        delete_in: memberdb.delete_in
+    }
+    res.send(returnobjekt)
+
+    
+
+
+
+
+    
 })
 
 module.exports = app;

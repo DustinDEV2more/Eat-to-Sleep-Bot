@@ -2,7 +2,7 @@ const fetchuserdata = () => {
     const usericon = document.querySelector(".usercard img")
     const username = document.querySelector(".usercard a")
     
-    fetch('http://server.dustin-dm.de:7869/api/user', {
+    fetch('http://dustin-dm.ddns.net:7869/api/userauth', {
     method: 'GET'
     })
     .then(response => {
@@ -12,6 +12,13 @@ const fetchuserdata = () => {
     response.json().then(data => {{
       username.textContent = data.name
       usericon.setAttribute("src", data.avatar)
+
+      //make admin tools visibil
+      if (data.type > 89){
+        document.querySelectorAll(".admin").forEach(q => {
+          q.setAttribute("style", "display: block;")
+        })
+      }
         }})    .catch((error) => {
         //react to all errors
         console.error('Error:', error);

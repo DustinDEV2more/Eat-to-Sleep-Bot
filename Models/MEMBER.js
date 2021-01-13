@@ -2,6 +2,7 @@ const mongoose = require("mongoose")
 
 const MemberSchema = mongoose.Schema({
     id: {required: true, type: String},
+    informations: {name: String, discriminator: String, avatar: String},
     type: {default: 0, type: Number},
 
     currencys:{
@@ -27,14 +28,14 @@ const MemberSchema = mongoose.Schema({
 
     },
     oauth: {
-        access_token: String,
+        access_token: {default: null, type: String},
         refresh_token: String,
         expire_date: Date,
         scopes: Array,
         redirect: String,
         cookies: Array
     },
-    delete_in: Date
+    delete_in: {default: null, type: Date}
 })
 
 module.exports = mongoose.model("Member-v2.0", MemberSchema)

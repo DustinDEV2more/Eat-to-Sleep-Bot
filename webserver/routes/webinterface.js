@@ -12,10 +12,9 @@ app.use("/", (req, res, next) => {
 })
 
 
-app.get("/test", (req, res) => {
-    res.send("nice")
+app.get("/user/:id", (req, res) => {
+    res.render("userpage", {raw: false})
 })
-
 
 
 app.use("*", (req, res) => {
