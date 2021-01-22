@@ -30,10 +30,10 @@ app.get("/coins/:id", async (req, res) => {
     var mdb = await MEMBER.findOne({"id": req.params.id})
     if (!mdb) return res.send("DB INDEX not found")
     mdb.currencys.coins.log = mdb.currencys.coins.log.reverse()
-
+    var type = require("../modules/member-type-to-word")(mdb.type)
     discordclient.guilds.cache.get("585511241628516352").members.fetch(mdb.id).then(m => {
     
-    res.render("coincard", {raw: true, member: mdb, pb: m.user.displayAvatarURL() + "?size=2048", tag: m.user.tag})
+    res.render("coincard", {raw: true, member: mdb, pb: m.user.displayAvatarURL() + "?size=2048", tag: m.user.tag, type})
     })
 
 })
@@ -43,15 +43,20 @@ app.get("/rank/:id", async (req, res) => {
     var discordclient = require("../index").client
     var mdb = await MEMBER.findOne({"id": req.params.id})
     if (!mdb) return res.send("DB INDEX not found")
-    mdb.currencys.ranks.nextxp = 10 * mdb.currencys.ranks.rank / 10 * 5; 
+    mdb.currencys.ranks.nextxp = 10 * mdb.currencys.ranks.rank / 10 * 5;
+    var type = require("../modules/member-type-to-word")(mdb.type)
+    mdb.type = require("../modules/member-type-to-word")(mdb.type)
 
     discordclient.guilds.cache.get("585511241628516352").members.fetch(mdb.id).then(m => {
     
-    res.render("rankcard", {raw: true, member: mdb, pb: m.user.displayAvatarURL() + "?size=2048", tag: m.user.tag})
+    res.render("rankcard", {raw: true, member: mdb, pb: m.user.displayAvatarURL() + "?size=2048", tag: m.user.tag, type})
     })
 
 })
 
+
+
+app.use("/", (req, res) => {res.redirect("/webinterface")})
 app.listen(7869, () => {
     console.log("Webserver is active and listenig on 7869")
 })

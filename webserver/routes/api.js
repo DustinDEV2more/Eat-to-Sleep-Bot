@@ -107,8 +107,9 @@ app.use("/user/:id", async (req, res) => {
         name: memberdb.informations.name,
         discriminator: memberdb.informations.discriminator,
         avatar: memberdb.informations.avatar,
+        type: require("../../modules/member-type-to-word")(memberdb.type),
 
-        coins: {amount: memberdb.currencys.coins.amount},
+        coins: {amount: memberdb.currencys.coins.amount, last_daily: memberdb.currencys.coins.last_daily},
         ranks: memberdb.currencys.ranks,
         warnings: memberdb.warnings,
         stats: memberdb.statistics,

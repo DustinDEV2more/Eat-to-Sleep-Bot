@@ -4,9 +4,9 @@ const fs = require("fs")
 const embed = require("./Embed");
 const { options } = require("./webserver/routes/api");
 
-// client.api.applications(client.user.id).guilds("604747271862485012").commands.get().then(res => {
+// client.api.applications(client.user.id).guilds("585511241628516352").commands.get().then(res => {
 //     res.forEach(element => {
-//     client.api.applications(client.user.id).guilds("604747271862485012").commands(element.id).delete()
+//     client.api.applications(client.user.id).guilds("585511241628516352").commands(element.id).delete()
 //     });
 // })
 

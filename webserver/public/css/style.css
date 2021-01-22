@@ -177,7 +177,7 @@ header nav {
 
 .doublecard {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     margin-left: 40px;
     margin-right: 40px;
 }
