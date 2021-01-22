@@ -41,7 +41,11 @@ exports.command = {
                 {
                     "name": "lautstärke",
                     "value": "ls"
-                }
+				},
+				{
+					"name": "shuffle",
+					"value": "shuffle"
+				}
             ]},
         {
             "name": "aktions_parameter",
@@ -105,7 +109,6 @@ exports.command = {
 			if (!args.find(x => x.name == "aktions_parameter")) return send(int, embed.error_user("Keine Playlist angegeben", "Du musst einen YouTube Video Link angeben"))
 			
             var playlistid = args.find(x => x.name == "aktions_parameter").value.split("list=")
-            console.log(playlistid)
 
 			//Fetch Song Infoinformation
 			var playlist_videos = await fetch(`https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistid.slice(-1)[0]}&key=${config.youtube_api.key}`).then(res => res.json())
@@ -196,6 +199,31 @@ exports.command = {
 		if (args.find(x => x.name == "aktion").value == "nowplaying"){
 			if (!client.music[int.guild_id]) return send(int, embed.error_user("Keinen Player gefunden", "Mir ist kein Channel bewusst in dem ich gerade einen Song abspiele"))
 			send(int, embed.success("Aktueller Song:", `[${client.music[int.guild_id].queue[0].title}](${client.music[int.guild_id].queue[0].url}) von [${client.music[int.guild_id].queue[0].author}](${client.music[int.guild_id].queue[0].author_url})`))
+		}
+
+		if (args.find(x => x.name == "aktion").value == "shuffle"){
+			if (!client.music[int.guild_id]) return send(int, embed.error_user("Keinen Player gefunden", "Mir ist kein Channel bewusst in dem ich gerade einen Song abspiele"))
+			function shuffle(array) {
+				let counter = array.length;
+			
+				// While there are elements in the array
+				while (counter > 0) {
+					// Pick a random index
+					let index = Math.floor(Math.random() * counter);
+			
+					// Decrease counter by 1
+					counter--;
+			
+					// And swap the last element with it
+					let temp = array[counter];
+					array[counter] = array[index];
+					array[index] = temp;
+				}
+			
+				return array;
+			}
+			client.music[int.guild_id].queue == shuffle(client.music[int.guild_id].queue)
+			send(int, embed.success("Queue neugeneriert", `Ich habe die Playlist auseinander genommen und zufällig neu aneinander gestellt`))
 		}
 
 		function play(GuildId) {

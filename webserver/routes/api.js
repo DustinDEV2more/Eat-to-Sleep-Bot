@@ -125,4 +125,8 @@ app.use("/user/:id", async (req, res) => {
     
 })
 
+//music
+const musicapi = require("../../commands/musik").api
+app.use("/music", musicapi)
+
 module.exports = app;

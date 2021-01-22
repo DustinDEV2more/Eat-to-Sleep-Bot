@@ -2,7 +2,7 @@ exports.command = {
 	name: 'Musik',
 	call: 'm',
 	description: 'Spielt Musik in deinem Voice Channel von YouTube ab',
-    usage: `m <[play <youtube-link>/playlist <youtube-playlist-link>/stop/skip/ls <lautstärke 0-4>/queue/nowplaying/loop]>`,
+    usage: `m <[play <youtube-link>/playlist <youtube-playlist-link>/stop/skip/ls <lautstärke 0-4>/queue/nowplaying/loop/shuffle]>`,
     permissions: [],
 	async execute(message, args) {
 		var {client} = require("../index")
@@ -85,7 +85,6 @@ exports.command = {
 			if (message.member.voice.channel) {
 				client.music[message.channel.guild.id] = {queue: [], loop: false, volume: 1};
 
-				console.log(playlist_videos.items[0])
 				playlist_videos.items.forEach(async video => {
 					var Videoinfos = {
 					title: video.snippet.title,
@@ -151,6 +150,31 @@ exports.command = {
 			message.channel.send(embed.success("Aktueller Song:", `[${client.music[message.channel.guild.id].queue[0].title}](${client.music[message.channel.guild.id].queue[0].url}) von [${client.music[message.channel.guild.id].queue[0].author}](${client.music[message.channel.guild.id].queue[0].author_url})`))
 		}
 
+		if (args[0].toLocaleLowerCase() == "shuffle" || args[0].toLocaleLowerCase() == "sh"){
+			if (!client.music[message.channel.guild.id]) return message.channel.send(embed.error_user("Keinen Player gefunden", "Mir ist kein Channel bewusst in dem ich gerade einen Song abspiele"))
+			function shuffle(array) {
+				let counter = array.length;
+			
+				// While there are elements in the array
+				while (counter > 0) {
+					// Pick a random index
+					let index = Math.floor(Math.random() * counter);
+			
+					// Decrease counter by 1
+					counter--;
+			
+					// And swap the last element with it
+					let temp = array[counter];
+					array[counter] = array[index];
+					array[index] = temp;
+				}
+			
+				return array;
+			}
+			client.music[message.channel.guild.id].queue == shuffle(client.music[message.channel.guild.id].queue)
+			message.channel.send(embed.success("Queue neugeneriert", `Ich habe die Playlist auseinander genommen und zufällig neu aneinander gestellt`))
+		}
+
 		function play(GuildId) {
 			if (client.music[GuildId].queue.length == 0) {
 				//Leave Voicechannel if queue is empty
@@ -179,7 +203,7 @@ const express = require("express");
 const app = express.Router();
 
 app.use("/:guildid/queue", (req, res) => {
-	 if (!client.music[req.query.guildid]) return res.status(400).send({"error": "No queue availible"})
+	 if (!client.music[req.query.guildid]) return res.status(401).send({"error": "No queue availible"})
 	 		res.send(client.music[req.params.guildid].queue)
 	
 })

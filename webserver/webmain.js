@@ -56,7 +56,7 @@ app.get("/rank/:id", async (req, res) => {
 
 
 
-app.use("/", (req, res) => {res.redirect("/webinterface")})
+// app.use("/", (req, res) => {res.redirect("/webinterface")})
 app.listen(7869, () => {
     console.log("Webserver is active and listenig on 7869")
 })
