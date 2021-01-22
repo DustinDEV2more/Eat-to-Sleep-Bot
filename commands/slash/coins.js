@@ -13,7 +13,7 @@ exports.command = {
     ],
 	async execute(int, args, createAPIMessage, client) {
     const Discord = require("discord.js")
-    const embed = require("../../Embed");
+    const embed = require("../../modules/Embed");
 
     const puppeteer = require('puppeteer');
 

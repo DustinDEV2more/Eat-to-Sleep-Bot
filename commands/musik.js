@@ -7,7 +7,7 @@ exports.command = {
 	async execute(message, args) {
 		var {client} = require("../index")
 		var config = require("../config.json")
-		const embed = require("../Embed")
+		const embed = require("../modules/Embed")
 		const ytdl = require('ytdl-core');
 		const fetch = require('node-fetch');
 		const OLDMEMBER = require("../Models/OLD-MEMBER")
@@ -203,7 +203,7 @@ const express = require("express");
 const app = express.Router();
 
 app.use("/:guildid/queue", (req, res) => {
-	 if (!client.music[req.query.guildid]) return res.status(401).send({"error": "No queue availible"})
+	 if (!client.music[req.query.guildid].queue) return res.status(401).send({"error": "No queue availible"})
 	 		res.send(client.music[req.params.guildid].queue)
 	
 })

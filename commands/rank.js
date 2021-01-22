@@ -6,7 +6,7 @@ exports.command = {
     permissions: [],
 	async execute(message, args) {
         const Discord = require('discord.js');
-        const embed = require("../Embed")
+        const embed = require("../modules/Embed")
         const puppeteer = require('puppeteer');
         
         var user = message.author.id

@@ -5,7 +5,7 @@ exports.command = {
     usage: `daily`,
     permissions: [],
 	async execute(message, args) {
-		const embed = require("../Embed")
+		const embed = require("../modules/Embed")
         const MEMBER = require("../Models/MEMBER")
         
         var memberdb = await MEMBER.findOne({"id": message.member.id})

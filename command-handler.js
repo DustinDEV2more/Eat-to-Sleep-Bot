@@ -1,7 +1,7 @@
 var { client } = require("./index")
 var config = require("./config.json")
 const fs = require("fs")
-const embed = require("./Embed")
+const embed = require("./modules/Embed")
 
 
 //read command folder

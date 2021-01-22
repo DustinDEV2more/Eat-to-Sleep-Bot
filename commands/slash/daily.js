@@ -5,7 +5,7 @@ exports.command = {
 
     options: [],
 	async execute(int, args, send, client) {
-		const embed = require("../../Embed")
+		const embed =  require("../../modules/Embed");
         const MEMBER = require("../../Models/MEMBER")
         
         var memberdb = await MEMBER.findOne({"id":int.member.user.id})

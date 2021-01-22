@@ -13,8 +13,7 @@ exports.command = {
     ],
 	async execute(int, args, send, client) {
     const Discord = require("discord.js")
-    const embed = require("../../Embed");
-
+    const embed = require("../../modules/Embed");
     const puppeteer = require('puppeteer');
 
     //Post Discord Server that we resived the intigration call

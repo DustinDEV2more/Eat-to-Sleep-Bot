@@ -5,7 +5,7 @@ exports.command = {
     usage: `pay <user/coins> <coins/user>`,
     permissions: [],
 	async execute(message, args) {
-		const embed = require("../Embed")
+		const embed = require("../modules/Embed")
         const MEMBER = require("../Models/MEMBER")
         
         var amount = null,

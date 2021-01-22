@@ -18,7 +18,7 @@ exports.command = {
         },
     ],
 	async execute(int, args, send, client) {
-		const embed = require("../../Embed")
+        const embed = require("../../modules/Embed");
         const MEMBER = require("../../Models/MEMBER")
         
         var amount = args.find(x => x.name == "coins").value,

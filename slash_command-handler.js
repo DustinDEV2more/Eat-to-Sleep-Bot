@@ -1,7 +1,7 @@
 var { client } = require("./index")
 var config = require("./config.json")
 const fs = require("fs")
-const embed = require("./Embed");
+const embed = require("./modules/Embed")
 const { options } = require("./webserver/routes/api");
 
 // client.api.applications(client.user.id).guilds("585511241628516352").commands.get().then(res => {
