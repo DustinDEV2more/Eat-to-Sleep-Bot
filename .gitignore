@@ -2,8 +2,6 @@ config.json
 
 dockerignore
 
-updatedocker.sh
-
 Dockerfile
 
 README.md
