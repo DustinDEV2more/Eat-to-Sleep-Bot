@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
+
+* {
+    font-family: 'Ubuntu', sans-serif;
+    padding: 0px;
+    margin: 0px;
+    color: white;
+}
+
+* h1 {
+    font-size: 40px;
+}
+
+body {
+    background-color: #2C2F33;
+}
+
+.card {
+    display: flex;
+    align-items: center;
+    margin: 10px;
+}
+
+.first h1 {
+    color: #ffd700;
+}
+
+.second h1 {
+    color: #C0C0C0;
+}
+
+.third h1 {
+    color: #bf8970;
+}
+
+.card .place {
+    margin-right: 30px;
+}
+
+.last .place {
+    margin-right: 5px;
+}
+
+.top3 .place {
+    margin-right: 33px;
+}
+
+.card img {
+    width: 45px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.card .name {
+    margin-right: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 530px;
+}
+
+.card .tag {
+    font-size: 25px;
+    background-color: #7289DA;
+    border-radius: 4%;
+    padding: 3px;
+}
+
+.card .rank {
+    margin-left: 8px;
+}

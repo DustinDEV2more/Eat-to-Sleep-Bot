@@ -21,7 +21,8 @@ app.use("/api", cors(), api)
 const discord_oauth = require("./routes/discord-oauth")
 app.use("/discord", discord_oauth)
 
-const interface = require("./routes/webinterface")
+const interface = require("./routes/webinterface");
+const { type } = require('os');
 app.use("/webinterface", interface)
 
 app.get("/coins/:id", async (req, res) => {
@@ -51,6 +52,35 @@ app.get("/rank/:id", async (req, res) => {
     
     res.render("rankcard", {raw: true, member: mdb, pb: m.user.displayAvatarURL() + "?size=2048", tag: m.user.tag, type})
     })
+
+})
+
+//CHANGE OLD DATABASE TO NEW
+app.get("/ranklist", async (req, res) => {
+    var discordclient = require("../index").client
+    var MEMBER = require("../Models/OLD-MEMBER")
+    // var MEMBER = require("../Models/MEMBER")
+
+    //get the first 10 Member sorted by Ranks
+    var rankdata = await MEMBER.find().sort({"ranks.rank": -1})
+    // var rankdata = MEMBER.find().sort({"currencys.ranks.rank": -1})
+     var top10 = []
+
+     rankdata.slice(0, 10).forEach(m => {
+        var memberedit = m
+
+            var nondbinformation = { 
+            avatar: discordclient.users.cache.get(m.info.id).avatar,
+            tag: require("../modules/member-type-to-word")(1),
+            place: rankdata.indexOf(m) + 1
+         }
+         
+        //  console.log(m.extras)
+         top10.push({db: m, nondbinformation})
+     })
+
+
+    res.render("ranklistcard", {raw: true, ranklist: top10})
 
 })
 

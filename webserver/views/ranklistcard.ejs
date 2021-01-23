@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="/css/ranklistcard.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/gh/SebastianAigner/twemoji-amazing@master/twemoji-amazing.css" rel="stylesheet">
+</head>
+<body>
+    
+    <% ranklist.forEach(m => { %>
+
+
+
+        <div class="card <% if (m.nondbinformation.place == 1){%>first top3<%}%><% if (m.nondbinformation.place == 2){%>second top3<%}%><% if (m.nondbinformation.place == 3){%>third top3<%}%><% if (m.nondbinformation.place == 10){%>last<%}%>">
+        <h1 class="place"><% if (m.nondbinformation.place == 1){%><i class="twa twa-1st-place-medal"></i><%}%><% if (m.nondbinformation.place == 2){%><i class="twa twa-2nd-place-medal"></i><%}%><% if (m.nondbinformation.place == 3){%><i class="twa twa-3rd-place-medal"></i><%} if (m.nondbinformation.place > 3) {%>#<%= m.nondbinformation.place %><%}%></h1>
+        <img src="<% if (m.nondbinformation.avatar == null) {%>/src/default-pb.jpg<%} else{%> https://cdn.discordapp.com/avatars/<%= m.db.info.id %>/<%= m.nondbinformation.avatar %>.jpg<%}%>" alt="">
+        <h1 class="name"><%= m.db.info.name %></h1>
+        <h2 class="tag"><%= m.nondbinformation.tag %></h2>
+        <h1>,</h1>
+        <h1 class="rank">Rank: <%= m.db.ranks.rank %></h1>
+        </div>
+
+        <%  }); %> 
+    
+</body>
+</html>
