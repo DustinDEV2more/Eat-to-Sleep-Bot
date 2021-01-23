@@ -15,11 +15,10 @@ exports.command = {
             data: {type: 5}
         })
     
-    const viewport = {
-        width: 700,
-        height: 430,
-        deviceScaleFactor: 2,
-    };
+        const viewport = {
+            width: 850,
+            height: 570,
+        };
 
     (async () => {
         const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
