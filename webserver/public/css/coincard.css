@@ -33,12 +33,21 @@ body {
     align-items:center;    
 }
 
+.nametag {
+    /* Cut name if its to long */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 350px;
+}
+
+
 .amount {
     display:flex;
     align-items:center;    
 }
 
-.tag {margin-left: 10px;
+.type {margin-left: 10px;
 background-color: #7289DA;
 border-radius: 7%;
 padding: 3px;
