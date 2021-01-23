@@ -6,11 +6,11 @@
 <body>
 
 <div class="card">
-    <div class="profilepicture"><img src="<%= pb %>" alt="Profile Picture"></div>
+    <div class="profilepicture"><img src="https://cdn.discordapp.com/avatars/<%= member.id %>/<%= pb %>.webp?size=2048" alt="Profile Picture"></div>
 
     <div class="infos">
         <div class="name">
-            <h1 class="nametag"><%= tag %></h1>
+            <h1 class="nametag"><%= member.informations.name %>#<%= member.informations.discriminator %></h1>
             <div class="type"><h2><%= type %></h2></div>
         </div>
         
