@@ -28,7 +28,7 @@ exports.command = {
             waitUntil: 'networkidle0', // Wait until the network is idle
         });
         var screenshot = await page.screenshot();
-        const attachment = new Discord.MessageAttachment(screenshot, `Ranklist.png`);
+        const attachment = new Discord.MessageAttachment(screenshot, `ranklist.png`);
         
         client.guilds.cache.get(int.guild_id).channels.cache.get(int.channel_id).send(attachment)
       

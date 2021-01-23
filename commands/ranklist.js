@@ -22,7 +22,7 @@ exports.command = {
                 waitUntil: 'networkidle0', // Wait until the network is idle
             });
             var screenshot = await page.screenshot();
-            const attachment = new Discord.MessageAttachment(screenshot, `Ranklist.png`);
+            const attachment = new Discord.MessageAttachment(screenshot, `ranklist.png`);
             message.channel.send(attachment)
           
             await browser.close();

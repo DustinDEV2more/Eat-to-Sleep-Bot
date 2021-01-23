@@ -54,6 +54,7 @@ body {
 .card .name {
     margin-right: 8px;
     white-space: nowrap;
+    /* Cut name if its to long */
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 530px;
