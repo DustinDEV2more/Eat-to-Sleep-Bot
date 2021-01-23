@@ -13,11 +13,11 @@
 
         <div class="card <% if (m.nondbinformation.place == 1){%>first top3<%}%><% if (m.nondbinformation.place == 2){%>second top3<%}%><% if (m.nondbinformation.place == 3){%>third top3<%}%><% if (m.nondbinformation.place == 10){%>last<%}%>">
         <h1 class="place"><% if (m.nondbinformation.place == 1){%><i class="twa twa-1st-place-medal"></i><%}%><% if (m.nondbinformation.place == 2){%><i class="twa twa-2nd-place-medal"></i><%}%><% if (m.nondbinformation.place == 3){%><i class="twa twa-3rd-place-medal"></i><%} if (m.nondbinformation.place > 3) {%>#<%= m.nondbinformation.place %><%}%></h1>
-        <img src="<% if (m.nondbinformation.avatar == null) {%>/src/default-pb.jpg<%} else{%> https://cdn.discordapp.com/avatars/<%= m.db.info.id %>/<%= m.nondbinformation.avatar %>.jpg<%}%>" alt="">
-        <h1 class="name"><%= m.db.info.name %></h1>
+        <img src="<% if (m.db.informations.avatar == null) {%>/src/default-pb.jpg<%} else{%> https://cdn.discordapp.com/avatars/<%= m.db.id %>/<%= m.db.informations.avatar %>.jpg<%}%>" alt="">
+        <h1 class="name"><%= m.db.informations.name %></h1>
         <h2 class="tag"><%= m.nondbinformation.tag %></h2>
         <h1>,</h1>
-        <h1 class="rank">Rank: <%= m.db.ranks.rank %></h1>
+        <h1 class="rank">Rank: <%= m.db.currencys.ranks.rank %></h1>
         </div>
 
         <%  }); %> 
