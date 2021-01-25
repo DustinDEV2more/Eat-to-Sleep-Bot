@@ -13,6 +13,7 @@ const client = new Discord.Client();
 client.commands = new Discord.Collection();
 client.shop_items = new Discord.Collection();
 client.music = {}
+client.webhooks = {}
 var items = []
 
 exports.client = client;
