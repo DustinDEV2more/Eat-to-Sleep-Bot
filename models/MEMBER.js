@@ -19,7 +19,13 @@ const MemberSchema = mongoose.Schema({
     warns: { type: Array, default: [] },
     more: {
         ytvoice: {type: Boolean, default: false},
-        nintendo: String
+        nintendo: String,
+        roleplay: {
+            name: String,
+            gender: Number,
+            age: Number,
+            picture: String,
+        }
     },
     expire: Date
 })

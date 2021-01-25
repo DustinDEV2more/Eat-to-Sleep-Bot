@@ -153,4 +153,7 @@ require("./events/usemyvoice")
 //Webserver
 require("./webserver/webmain")
 
+//roleplay
+require("./roleplay modules/roleplay-message")
+
 client.login(config.tokens.discord)
