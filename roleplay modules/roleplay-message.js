@@ -1,4 +1,5 @@
 var client = require("../index").client
+var config = require("../index").config
 var MEMBER = require("../models/MEMBER")
 var Discord = require("discord.js")
 
@@ -12,17 +13,12 @@ client.on("message", async message => {
     if (!memberdb) return;
     if (!memberdb.more.roleplay) return;
 
-    //create a webhook
-    await message.channel.createWebhook(memberdb.more.roleplay.name, memberdb.more.roleplay.picture)
-    .then(
-        async Webhook => {
-        // var Webhook = new Discord.WebhookClient(Webhook.id, Webhook.token)
-        await Webhook.send(message.content)
-        setTimeout(async () => {
-            await Webhook.delete()
-        }, 10000);
+        var Webhook = new Discord.WebhookClient(config.tokens.webhook[0], config.tokens.webhook[1])
+        
+        if (!message.attachments.first()) {Webhook.send(message.content, {username: memberdb.more.roleplay.name, avatarURL: memberdb.more.roleplay.picture})}
+        else {
+            Webhook.send(message.content, {username: memberdb.more.roleplay.name, avatarURL: memberdb.more.roleplay.picture, files: [{name: message.attachments.first().filename, attachment: message.attachments.first().proxyURL}]}).catch(() => {message.reply("Sorry. Der Content den du zur Message hinzugefügt hast is just to fucking big for me and daddy discord")})
         }
-    )
-    .catch(console.error)
+
 
 })
