@@ -113,21 +113,51 @@ exports.command = {
 			//Fetch Song Infoinformation
 			var playlist_videos = await fetch(`https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistid.slice(-1)[0]}&key=${config.youtube_api.key}`).then(res => res.json())
 
+			async function fetchplaylist_videos(){
+				var count = playlist_videos.pageInfo.resultsPerPage,
+					all = playlist_videos.pageInfo.totalResults,
+					nextpagetoken = playlist_videos.nextPageToken
+
+			playlist_videos.items.forEach(async video => {
+				var Videoinfos = {
+				title: video.snippet.title,
+				url: "https://www.youtube.com/watch?v=" + video.snippet.resourceId.videoId,
+				author: video.snippet.channelTitle,
+				author_url: "https://www.youtube.com/channel/" + video.snippet.channelId,
+				video_lenght: null
+			}
+				client.music[int.guild_id].queue.push(Videoinfos);
+				});
+
+				if (all > 50) {
+					while (count != all) {
+					var nextpage = await fetch(`https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistid.slice(-1)[0]}&key=${config.youtube_api.key}&pageToken=${nextpagetoken}`).then(res => res.json())
+
+
+					//just while things
+					count += nextpage.items.length
+					nextpagetoken = nextpage.nextPageToken
+
+					nextpage.items.forEach(async video => {
+						var Videoinfos = {
+						title: video.snippet.title,
+						url: "https://www.youtube.com/watch?v=" + video.snippet.resourceId.videoId,
+						author: video.snippet.channelTitle,
+						author_url: "https://www.youtube.com/channel/" + video.snippet.channelId,
+						video_lenght: null
+					}
+						client.music[int.guild_id].queue.push(Videoinfos);
+						});
+					}
+				}
+
+		}
+
 			//check if bot is already playing a song in that server
 			if (client.music[int.guild_id]){
-				//already playing				
-				playlist_videos.items.forEach(async video => {
-					var Videoinfos = {
-					title: video.snippet.title,
-					url: "https://www.youtube.com/watch?v=" + video.snippet.resourceId.videoId,
-					author: video.snippet.channelTitle,
-					author_url: "https://www.youtube.com/channel/" + video.snippet.channelId,
-					video_lenght: null
-				}
-					client.music[int.guild_id].queue.push(Videoinfos);
-					});
-
-				return send(int, embed.success("Playlist hinzugefügt", `Ich habe **${playlist_videos.items.length} Videos** zur queue hinzugefügt`))
+				//already playing
+				fetchplaylist_videos()
+				return send(int, embed.success("Playlist hinzugefügt", `Ich habe die Playlist zur queue hinzugefügt`))
 			
 			}
 			else {
@@ -135,19 +165,10 @@ exports.command = {
 			if (client.guilds.cache.get(int.guild_id).members.cache.get(int.member.user.id).voice.channel) {
 				client.music[int.guild_id] = {queue: [], loop: false, volume: 1};
 
-				playlist_videos.items.forEach(async video => {
-					var Videoinfos = {
-					title: video.snippet.title,
-					url: "https://www.youtube.com/watch?v=" + video.snippet.resourceId.videoId,
-					author: video.snippet.channelTitle,
-					author_url: "https://www.youtube.com/channel/" + video.snippet.channelId,
-					video_lenght: null
-				}
-					client.music[int.guild_id].queue.push(Videoinfos);
-					});
+				fetchplaylist_videos()
 
 				play(int.guild_id)
-				return send(int, embed.success("Playlist hinzugefügt", `Ich werde **${playlist_videos.items.length} Videos** in deinem Voicechannel abspielen`))
+				return send(int, embed.success("Playlist hinzugefügt", `Ich werde die Playlist in deinem Voicechannel abspielen`))
 
 				} 
 				  
