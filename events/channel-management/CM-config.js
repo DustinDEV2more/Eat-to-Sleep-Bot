@@ -55,7 +55,7 @@ new RichEmbed() //Embed wish will be send in the Text Channel
 .setColor("#e63244")
 .setThumbnail("https://vignette.wikia.nocookie.net/among-us-wiki/images/a/a6/1_red.png/revision/latest/top-crop/width/360/height/450?cb=20200912125145")
 .setTitle("Denkis Bibelstunde").setDescription("Denkis Bibelstunde hat begonnen. Gesellt euch unter die Augen Jesus und setzt euch in den Beichtstuhl Priester Denki")
-.addField("Eure Teilnahme Geschenke:", "2* XP Boost in Spaceship Talks")
+.addField("Eure Teilnahme Geschenke:", "2* XP Boost in Spaceship Talks"),
 "585523787408212079", //Copie Permission from this Categorie ID
 "585523787408212079",  //Send Members back to this Categorie ID
 true, //xp x 2 > true or false
