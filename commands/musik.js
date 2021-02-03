@@ -225,7 +225,7 @@ const express = require("express");
 const app = express.Router();
 
 app.use("/:guildid/queue", (req, res) => {
-	 if (!client.music[req.query.guildid].queue) return res.status(401).send({"error": "No queue availible"})
+	 if (client.music[req.query.guildid] == undefined || client.music[req.query.guildid] == null) return res.status(401).send({"error": "No queue availible"})
 	 		res.send(client.music[req.params.guildid].queue)
 	
 })
