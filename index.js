@@ -30,6 +30,12 @@ mongoose.connect(config.tokens.db,{ useUnifiedTopology: true, useNewUrlParser: t
 
 
 client.on("ready", async () => {
+
+    client.channels.get("644283425389412357").fetchMessage("806516456178581567").then(msg => {
+        console.log(msg.embeds[0].color)
+    })
+
+
 require("./events/splatfest")
 require("./events/shop-system")
     //Check for old Members
