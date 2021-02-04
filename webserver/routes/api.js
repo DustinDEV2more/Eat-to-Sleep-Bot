@@ -3,9 +3,6 @@ const MEMBER = require("../../Models/MEMBER")
 const fetch = require("node-fetch")
 const DiscordOauth2 = require("discord-oauth2");
 const config = require("../../config.json");
-const cookieParser = require("cookie-parser");
-const { response } = require("express");
-const { ConnectionStates } = require("mongoose");
 
 const app = express.Router();
 

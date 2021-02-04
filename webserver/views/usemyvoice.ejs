@@ -1,0 +1,51 @@
+<div class="content">
+    <h2>Einverständniserklärung zur Nutzung von Stimmenaufnahmen und Nutzerinformationen</h2>
+
+    <p>zwischen Dustin David Meyer (Dustin_DM) und dem Nutzer und/oder Verwalter des Discord Accounts mit der Kennung "<em class="name"><%= user.name %>#<%= user.discriminator %></em>"</p>
+    <br>
+
+    <h3>Gegenstand:</h3>
+    <p>Stimmenaufnahmen und Nutzerinformationen, wie Name, Diskriminator und Profilbild des Discord Accounts im Jahre <%= year %></p>
+    <br>
+
+    <h3>Verwendungszweck</h3>
+    <p>Veröffentlichung für diverse Mediengattungen. Diese wären Plattformen wie YouTube oder Twitch.</p>
+    <br>
+
+    <h3>Erklärung</h3>
+    <p><%= user.name %> erklärt sein/ihr Einverständnis mit der Verwendung der Aufnahmen seiner/ihrer Person in Form von Audio für die oben beschriebenen Zwecke. Eine
+    Verwendung der Audio Aufnahmen für andere, als die beschriebenen Zwecke oder ein Inverkehrbringen durch Überlassung der Aufnahmen an Dritte, ist unzulässig.
+    Diese Einwilligung ist freiwillig. Diese Einwilligung
+    kann jederzeit mit Wirkung für die Zukunft widerrufen werden.</p>
+</div>
+
+<div class="content einwilligung" method="post">
+    <form action="/webinterface/usemyvoice/submit">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" value="<%= user.name %>"><br><br>
+        <input type="checkbox" id="checkbox" name="checkbox" value="yes">
+        <label for="checkbox">ich habe die Einverständniserklärung gelesen und bin mit den oben genannten Punkten einverstanden. Ich weiß, das meine Stimme von Dustin_DM aufgezeichnet werden könnte, sobald der Voice Channel einen roten Punkt im Namen hat.</label><br>
+        <input type="submit" value="Einwilligen">
+      </form>
+</div>
+<style>
+    .content {
+        padding: 20px;
+    }
+
+    input[type=text] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        color: black;
+        }
+
+        input[type=submit] {
+        width: 250px;
+        padding: 12px 20px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        color: black;
+        }
+</style>

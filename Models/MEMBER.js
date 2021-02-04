@@ -20,7 +20,6 @@ const MemberSchema = mongoose.Schema({
 
     warnings: { type: Array, default: [] },
     options: {
-        ytvoice: {type: Boolean, default: false},
         nintendo: String
     },
 
@@ -35,6 +34,12 @@ const MemberSchema = mongoose.Schema({
         redirect: String,
         cookies: Array
     },
+
+    usemyvoice: {
+        accepted: {type: Boolean, default: false},
+        date: Date
+    },
+
     delete_in: {default: null, type: Date}
 })
 
