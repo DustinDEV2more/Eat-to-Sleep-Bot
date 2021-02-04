@@ -1,34 +1,71 @@
 <div class="content">
     <h2>Einverständniserklärung zur Nutzung von Stimmenaufnahmen und Nutzerinformationen</h2>
 
-    <p>zwischen Dustin David Meyer (Dustin_DM) und dem Nutzer und/oder Verwalter des Discord Accounts mit der Kennung "<em class="name"><%= user.name %>#<%= user.discriminator %></em>"</p>
+    <p>zwischen Dustin David Meyer (Dustin_DM) und dem Nutzer und/oder Verwalter des Discord Accounts mit der Kennung "<%= user.name %>#<%= user.discriminator %>"</p>
     <br>
 
     <h3>Gegenstand:</h3>
-    <p>Stimmenaufnahmen und Nutzerinformationen, wie Name, Diskriminator und Profilbild des Discord Accounts im Jahre <%= year %></p>
+    <p>Stimmenaufnahmen und Nutzerinformationen wie Name, Diskriminator und Profilbild des Discord Accounts im Jahre <%= year %></p>
     <br>
 
     <h3>Verwendungszweck</h3>
     <p>Veröffentlichung für diverse Mediengattungen. Diese wären Plattformen wie YouTube oder Twitch.</p>
     <br>
 
+    <h3>Widerruf</h3>
+    <p>Ein Widerruf kann jederzeit und mit sofortiger Wirkung für die Zukunft erfolgen. Dieser ist auf folgenden Wegen einzureichen:</p>
+    <ul>
+        <li><p>Email: public@dustin-dm.de</p><em>wäre mir am liebsten</em></li>
+        <li><p>Über den Postweg:</p><p> Anja Meyer z.Hd Dustin Meyer</p><p>Bergstraße 50, 09113</p></li>
+    </ul>
+    <em>Es reicht völlig aus, mir einen kurzen Text zu schreiben. Ihr müsst nicht zwingend ein Anwalt Geschmiere an eine dieser Möglichkeiten schicken. Einfach Bescheid geben, dass ihr keine Lust mehr darauf habt, dass Dustin_DM eure Stimme verwendet. Das reicht aus ^^</em>
+    <br>
+    <br>
+
     <h3>Erklärung</h3>
     <p><%= user.name %> erklärt sein/ihr Einverständnis mit der Verwendung der Aufnahmen seiner/ihrer Person in Form von Audio für die oben beschriebenen Zwecke. Eine
     Verwendung der Audio Aufnahmen für andere, als die beschriebenen Zwecke oder ein Inverkehrbringen durch Überlassung der Aufnahmen an Dritte, ist unzulässig.
     Diese Einwilligung ist freiwillig. Diese Einwilligung
-    kann jederzeit mit Wirkung für die Zukunft widerrufen werden.</p>
+    kann jederzeit mit Wirkung für die Zukunft über die oben beschriebenen Wege widerrufen werden.</p>
 </div>
 
-<div class="content einwilligung" method="post">
-    <form action="/webinterface/usemyvoice/submit">
-        <label for="name">Name:</label><br>
+<div class="content einwilligung">
+    <form id="form">
+        <label for="name" id="namelabel">*Digitale Signatur in Form von Name oder Kennung:</label><br>
         <input type="text" id="name" name="name" value="<%= user.name %>"><br><br>
-        <input type="checkbox" id="checkbox" name="checkbox" value="yes">
-        <label for="checkbox">ich habe die Einverständniserklärung gelesen und bin mit den oben genannten Punkten einverstanden. Ich weiß, das meine Stimme von Dustin_DM aufgezeichnet werden könnte, sobald der Voice Channel einen roten Punkt im Namen hat.</label><br>
-        <input type="submit" value="Einwilligen">
+        <input type="checkbox" class="checkbox1" name="read_and_accept" value="readandaccept">
+        <label for="read_and_accept" id="read_and_accept-label">*Ich habe die Einverständniserklärung gelesen und bin mit den oben genannten Punkten einverstanden. Ich weiß, dass meine Stimme von Dustin_DM aufgezeichnet werden könnte, sobald der Voice Channel einen roten Punkt im Namen hat.</label><br>
+        <br>
+        <input type="checkbox" id="checkbox2" name="email" value="email">
+        <label for="email">Ich möchte eine einmalige Email bekommen, die eine Kopie dieser Einverständniserklärung beinhaltet, sowie eine bestätigungs Email, im falle eines Widerrufes.</label><br>
       </form>
+      <br>
+      <div class="submit-button">
+        <p id="button">Einwilligen</p>
+        <div id="loading" class="bouncingLoader" style="display: none;"><div>
+          
+        </div></div>
+          
+      </div>
+      <br>
+      <br>
+
+      <p>* Pflichtfeld</p>
 </div>
 <style>
+
+
+    .submit-button {
+        width: 250px;
+        padding: 12px 20px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        text-align: center;
+        background-color: #7289DA;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
     .content {
         padding: 20px;
     }
@@ -48,4 +85,47 @@
         box-sizing: border-box;
         color: black;
         }
+
+        ul {
+            margin-left: 20px;
+        }
+
+        em {
+            color: gray;
+        }
+
+        .bouncingLoader > div, .bouncingLoader:before, .bouncingLoader:after {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    background: hsl(0, 0%, 100%);
+    margin-bottom: -5px;
+    border-radius: 50%;
+    animation: bouncing-loader 0.6s infinite alternate;
+}
+
+.bouncingLoader > div, .bouncingLoader:before, .bouncingLoader:after {
+    content: "";
+}
+
+.bouncingLoader > div {
+    margin: 0 5px;
+}
+
+.bouncingLoader > div {
+    animation-delay: 0.2s;
+}
+
+.bouncingLoader:after {
+    animation-delay: 0.4s;
+}
+
+@keyframes bouncing-loader {
+    to {
+        opacity: 0.1;
+        transform: translate3d(0, -16px, 0);
+    }
+}
+
 </style>
+<script src="/js/usemyvoice.js"></script>

@@ -24,3 +24,6 @@ Mongoose.connect(config.database, {useNewUrlParser: true, useUnifiedTopology: tr
 
 
 require("./webserver/webmain")
+
+require("./events/welcome")
+require("./events/streaming-talk")

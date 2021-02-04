@@ -1,6 +1,6 @@
 const fetchuserprofile = () => {
 
-    fetch('http://dustin-dm.ddns.net:7869/api/user/@me', {
+    fetch('http://192.168.0.28:7869/api/user/@me', {
     method: 'GET'
     })
     .then(response => {

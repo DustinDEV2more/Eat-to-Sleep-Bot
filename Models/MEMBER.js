@@ -37,7 +37,8 @@ const MemberSchema = mongoose.Schema({
 
     usemyvoice: {
         accepted: {type: Boolean, default: false},
-        date: Date
+        date: Date,
+        signature: String
     },
 
     delete_in: {default: null, type: Date}

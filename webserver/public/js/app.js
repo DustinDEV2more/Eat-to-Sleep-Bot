@@ -2,7 +2,7 @@ const fetchuserdata = () => {
     const usericon = document.querySelector(".usercard img")
     const username = document.querySelector(".usercard a")
     
-    fetch('http://dustin-dm.ddns.net:7869/api/userauth', {
+    fetch('http://192.168.0.28:7869/api/userauth', {
     method: 'GET'
     })
     .then(response => {
