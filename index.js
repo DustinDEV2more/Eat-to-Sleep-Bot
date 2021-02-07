@@ -27,3 +27,4 @@ require("./webserver/webmain")
 
 require("./events/welcome")
 require("./events/streaming-talk")
+require("./events/overwatch-arcade")

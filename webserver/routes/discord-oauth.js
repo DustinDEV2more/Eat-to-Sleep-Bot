@@ -45,7 +45,7 @@ app.get("/redirect", async (req, res) => {
 
             if (!memberdb) return res.send("Login nicht möglich. Du bist nicht auf dem Eat, Sleep, Nintendo, Repeat Server")//send error if member is not in database
             //save to db
-            await MEMBER.findOneAndUpdate({"id": userinfo.id}, {"oauth": {"access_token": code.access_token, "refresh_token": code.refresh_token, "expire_date": expire_date, "scopes": code.scope.split(" "),"redirect": `${req.protocol}://${req.headers.host}/discord/redirect`,"cookies": memberdb.oauth.cookies}})
+            await MEMBER.findOneAndUpdate({"id": userinfo.id}, {"oauth": {"access_token": code.access_token, "refresh_token": code.refresh_token, "expire_date": expire_date, "scopes": code.scope.split(" "),"redirect": `${req.protocol}://${req.headers.host}/discord/redirect`,"cookies": memberdb.oauth.cookies}, informations: {name: userinfo.username, discriminator: userinfo.discriminator, avatar: userinfo.avatar}})
             
             //save cookie token to the cookies
             res.cookie("token", login, { expires: expire_date})
