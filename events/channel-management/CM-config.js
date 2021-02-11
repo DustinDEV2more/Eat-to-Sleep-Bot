@@ -44,19 +44,3 @@ new RichEmbed() //Embed wish will be send in the Text Channel
 "585523787408212079",  //Send Members back to this Categorie ID
 true, //xp x 2 > true or false
 )
-
-var Denkis_Bibel_Stunde = new channelMclass(
-"00 18 * * 5", //start time
-"30 18 * * 5", //end time
-"Denkis Bibelstunde", //Event Name
-"Beichtstuhl", // Talk Name ">>Talk<< 1", ">>Talk<< 2"
-"Die Bibel", //Text Channel Name
-new RichEmbed() //Embed wish will be send in the Text Channel 
-.setColor("#e63244")
-.setThumbnail("https://cdn.discordapp.com/attachments/619534754080882694/805782469164924948/photo5242329561742553368.jpg")
-.setTitle("Denkis Bibelstunde").setDescription("Denkis Bibelstunde hat begonnen. Gesellt euch unter die Augen Jesus und setzt euch in den Beichtstuhl Priester Denki")
-.addField("Eure Teilnahme Geschenke:", "2* XP Boost in Spaceship Talks"),
-"585523787408212079", //Copie Permission from this Categorie ID
-"585523787408212079",  //Send Members back to this Categorie ID
-true, //xp x 2 > true or false
-)
