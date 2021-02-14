@@ -6,11 +6,13 @@ const { api } = require("../commands/musik")
 
 var refresh_at_0 = schedule.scheduleJob("5 1 * * *", async function (){
     var apiresponse = await fetch("https://overwatcharcade.today/api/overwatch/today").then(res => res.json())
-    
+    console.log("triggered")
     if (apiresponse.is_today){
-        updatemsgs(apiresponse);
+    console.log("updating messages...")
+    updatemsgs(apiresponse);
     }
     else {
+    console.log("wait for another 10 Minutes...")
         wait10minutes();
         function wait10minutes(){
             setTimeout(async () => {
