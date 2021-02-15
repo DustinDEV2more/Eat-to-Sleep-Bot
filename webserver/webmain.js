@@ -65,7 +65,7 @@ app.get("/ranklist", async (req, res) => {
         var memberedit = m
 
             var nondbinformation = { 
-            tag: require("../modules/member-type-to-word")(1),
+            tag: require("../modules/member-type-to-word")(m.type),
             place: rankdata.indexOf(m) + 1
          }
          
