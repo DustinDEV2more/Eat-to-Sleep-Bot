@@ -9,7 +9,7 @@ document.getElementById('button').onclick = function (evt) {
     document.querySelector("#button").setAttribute("style", "display: none;")
     document.querySelector("#loading").setAttribute("style", "display: block;")
 
-    fetch('http://server.dustin-dm.de:7869/webinterface/usemyvoice/', {
+    fetch('http://192.168.0.28:7869/webinterface/usemyvoice/', {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'

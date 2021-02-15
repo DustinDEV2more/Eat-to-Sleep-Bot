@@ -19,6 +19,7 @@ app.get("/user/:id", (req, res) => {
     res.render("userpage", {raw: false})
 })
 
+//Einverständniss Erklärung für Stimmenbenutzung
 app.get("/usemyvoice", async (req, res) => {
     var MEMBER = require("../../Models/MEMBER")
     var memberdb = await MEMBER.findOne({"oauth.cookies.token": req.cookies.token})
@@ -38,7 +39,6 @@ app.get("/usemyvoice", async (req, res) => {
 app.post("/usemyvoice/", async (req, res) => {
     var MEMBER = require("../../Models/MEMBER")
 
-    console.log(req.body)
 
     if (!req.body.signature || req.body.signature == "") return res.status(401).send({error: "signature is required"});
     if (!req.body.accepted) return res.status(401).send({error: "you need to accept the terms"});
@@ -57,7 +57,7 @@ app.post("/usemyvoice/", async (req, res) => {
                 subject: "Einverständniserklärung zur Nutzung von Stimmenaufnahmen",
                 html: `<div class="content">
     
-                <p>Hey ${userinfo.username}! Wie du gewünscht hast, senden wir dir hier die Kopie der Einverständniserklärung zur Nutzung von Stimmenaufnahmen zu. Diese Email wurde automatisch verschickt. Bitte antworte nicht auf diese Email und schicken keine neuen Emails an eat-sleep-nintendo-repeat@dustin-dm.de<p>
+                <p>Hey ${userinfo.username}! Wie du gewünscht hast, senden wir dir hier die Kopie der Einverständniserklärung zur Nutzung von Stimmenaufnahmen zu. Diese Email wurde automatisch verschickt. Bitte antworte nicht auf diese Email und schicke keine neuen Emails an eat-sleep-nintendo-repeat@dustin-dm.de<p>
                 <br>
                 <br>
                 <h2>Einverständniserklärung zur Nutzung von Stimmenaufnahmen und Nutzerinformationen</h2>
@@ -97,8 +97,10 @@ app.post("/usemyvoice/", async (req, res) => {
                       return console.log(error);
                     }
                     console.log('Email sent: %s', info.messageId);
+                    if (config.betamode == false){
                     discordclient.users.cache.get(userinfo.id).send("✅ Vielen Dank! Du kannst nun in Stream Channel joinen.")
                     discordclient.channels.cache.get("586176769409810452").send(`${userinfo.username} hat die Einverständniserklärung zur Nutzung von Stimmenaufnahmen auf den Server hinterlegt.`)
+                    }
                     res.sendStatus(200)
                     
                   });
