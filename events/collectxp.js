@@ -9,6 +9,7 @@ const MEMBER = require("../models/MEMBER")
 client.cooldown = []
 exports.messagexp = async function messagexp(message) {
     if (client.guilds.get("585511241628516352").roles.get("712830005452865566").members.find(x => x.id === message.author.id)) return;
+    if (client.guilds.get("585511241628516352").roles.get("813496761628360714").members.find(x => x.id === message.author.id)) return;
 
     var random_xp = Math.floor(Math.random() * 5)
 
@@ -37,6 +38,7 @@ var voicexp = schedule.scheduleJob("0 * * * * *",async function(){
         if (bots_in_talk > channel.members.array().length - bots_in_talk || bots_in_talk == channel.members.array().length - bots_in_talk) return; //member is alone with an bot
         
         channel.members.array().forEach(async member => {
+            if (client.guilds.get("585511241628516352").roles.get("813496761628360714").members.find(x => x.id === member.id)) return;
             if (member.user.bot) return;
              if (member.selfMute || member.serverMute) return;
              if (member.selfDeaf || member.serverDeaf) return;
