@@ -20,6 +20,7 @@
   "dependencies": {
     "@discordjs/opus": "^0.3.3",
     "body-parser": "^1.19.0",
+    "bufferutil": "^4.0.3",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "discord-oauth2": "^2.6.0",
@@ -34,6 +35,8 @@
     "nodemailer": "^6.4.17",
     "nodemon": "^2.0.7",
     "puppeteer": "^5.5.0",
-    "ytdl-core": "^4.2.1"
+    "utf-8-validate": "^5.0.4",
+    "ytdl-core": "^4.5.0",
+    "ytdl-core-discord": "^1.2.5"
   }
 }

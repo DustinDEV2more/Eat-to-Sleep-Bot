@@ -3,7 +3,7 @@ const express = require('express')
 const bodyParser = require('body-parser');
 var expressLayouts = require('express-ejs-layouts');
 var cookieParser = require('cookie-parser');
-var cors = require('cors')
+var cors = require("cors")
 
 
 const app = express()
@@ -65,7 +65,7 @@ app.get("/ranklist", async (req, res) => {
         var memberedit = m
 
             var nondbinformation = { 
-            tag: require("../modules/member-type-to-word")(m.type),
+            tag: require("../modules/member-type-to-word")(1),
             place: rankdata.indexOf(m) + 1
          }
          
