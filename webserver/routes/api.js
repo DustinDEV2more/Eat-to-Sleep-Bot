@@ -1,52 +1,49 @@
 const express = require("express");
 const MEMBER = require("../../Models/MEMBER")
-const fetch = require("node-fetch")
 const DiscordOauth2 = require("discord-oauth2");
 const config = require("../../config.json");
+const schedule = require("node-schedule");
 
 const app = express.Router();
 
-//checking if request has a token and checks if token has a assoziated user --> cache for 1 hour
-var cookie_token_cache = [];
+//Checks if User has valid token, active discord tokens and counts rate limits
+var api_rate_limiting = {}
+var blocked = {}
 app.use("/", async (req, res, next) => {
     var cookie_token = req.cookies.token
     //if no cookie was send in request
     if (!cookie_token) return res.status(401).send({"error": "Unauthorized - missing cookie"});
+    
+    //rate limit
+    if (blocked[cookie_token] == -1) return res.status(429).send({"error": "rate limiting - You have overloaded the API and do not have permission to continue using the API."});
+    if (!api_rate_limiting[cookie_token]) api_rate_limiting[cookie_token] = 0
+    api_rate_limiting[cookie_token] += 1
+    if (api_rate_limiting[cookie_token] > 10){
+        //user has exedet the rate limits
 
-    //check if cookie is in cache
-    if (cookie_token_cache.find(x => x.cookie_token == cookie_token)) return next();
+        //write the blocked state to database
+        await MEMBER.findOneAndUpdate({"oauth.cookies.token": cookie_token}, {"oauth.blocking_state.is_blocked": true, "oauth.blocking_state.date": new Date()})
+        blocked[cookie_token] = -1
+        return res.status(429).send({"error": "rate limiting - You have overloaded the API and do not have permission to continue using the API."});
+    }
 
     //try to find member wish is assosiated to the cookie
     var memberdb = await MEMBER.findOne({"oauth.cookies.token": cookie_token})
 
     //didnt find member trough database
-    if (!memberdb) return res.status(401).send({"error": "Unauthorized - cookie not valid"});
+    if (!memberdb) return res.status(401).send({"error": "Unauthorized - credentials not valid"});
     //member found in database
 
-    else {
-    //save cookie_token to cache so api dont have to pull database for veryfication again, but remove it after an hour from cache
-    cookie_token_cache.push({cookie_token});
-    setTimeout(() => {
-        cookie_token_cache.pop();
-    }, 3600000);
-    //give request to path it belongs to
-     return next();
+    if (memberdb.oauth.blocking_state.is_blocked == true){
+        blocked[cookie_token] = -1
+        return res.status(429).send({"error": "rate limiting - You have overloaded the API and do not have permission to continue using the API."});
     }
-})
 
-//verifys if user has a vallid discord oauth session
-var discord_oauth_cache = [];
-app.use("/userauth", async (req, res) => {
-    var cookie_token = req.cookies.token
-    var memberdb = await MEMBER.findOne({"oauth.cookies.token": cookie_token})
-    if (!memberdb) return res.status(401).send({"error": "Unauthorized - cookie not valid"});
-
-    if (discord_oauth_cache.find(x => x.cookie_token == cookie_token)) return res.send(discord_oauth_cache.find(x => x.cookie_token == cookie_token).data);
-    //verify if Discord oauth access_token is still valid
-        //check if token is natually expiered
-        if (memberdb.oauth.expire_date < new Date()){
-            //token is expired. try to refresh it with refresh token
-            const oauth = new DiscordOauth2();
+    //check if Discord credentials still valid and active
+    if (memberdb.oauth.expire_date < new Date()){
+        //access_token that belongs to user is not valid anymore
+        //trying to refresh access_token
+        const oauth = new DiscordOauth2();
             oauth.tokenRequest({
                 clientId: config.discord_api.client_id,
                 clientSecret: config.discord_api.client_secret,
@@ -56,74 +53,33 @@ app.use("/userauth", async (req, res) => {
                 scope: memberdb.oauth.scopes,                
                 redirectUri: memberdb.oauth.redirect,
             }).then(async response => {
+                //token was refreshed succsessfull
                 var expire_date = new Date()
                 expire_date.setSeconds(expire_date.getSeconds() + response.expires_in)
                 await MEMBER.findOneAndUpdate({"id": memberdb.id}, {"oauth.access_token": response.access_token, "oauth.refresh_token": response.refresh_token, "oauth.expire_date": expire_date})
                 memberdb.oauth.access_token = response.access_token
             }).catch(error => {
-                return res.status(511).send({"error": "Unauthorized by Discord - Discord didnt allowed this Server to get Information about a User"});
+                //token was not able to get refrehed
+                return res.status(511).send({"error": "Unauthorized by Discord - The Server is currently not able to gather Informations about your Discord Account"});
             })
-        }
-        else {
-        //get Information from Discord Servers
-        fetch("https://discord.com/api/users/@me", {headers: {Authorization: `Bearer ${memberdb.oauth.access_token}`}}).then(discord_res => discord_res.json()).then(async json => {
-            if (json.message == "401: Unauthorized"){
-                return res.status(511).send({"error": "Unauthorized by Discord - Discord didnt allowed this Server to get Information about a User"});
-            }
-            if (json.id != undefined){
-                //save data to cache
-                discord_oauth_cache.push({cookie_token, data: {"name": json.username + "#" + json.discriminator, "avatar": `https://cdn.discordapp.com/avatars/${json.id}/${json.avatar}.png`, type: memberdb.type}});
-                setTimeout(() => {
-                    discord_oauth_cache.pop();
-                }, 1800000);
 
-                await MEMBER.findOneAndUpdate({"id": memberdb.id}, {informations: {name: json.username, discriminator: json.discriminator, avatar: json.avatar}})
-                return res.send({"name": json.username + "#" + json.discriminator, "avatar": `https://cdn.discordapp.com/avatars/${json.id}/${json.avatar}.png`, type: memberdb.type})
-            }
-            else {
-                return res.status(500).send({"error": "Discord Error - Something is wrong with the Discord Server response"});
-            }
-        })
-
-        }
-})
-
-//member informations
-app.use("/user/:id", async (req, res) => {
-    var cookie_token = req.cookies.token
-    var memberid = req.params.id
-    var memberdb = null
-    if (memberid == "@me"){
-        memberdb = await MEMBER.findOne({"oauth.cookies.token": cookie_token})}
-    else {memberdb = await MEMBER.findOne({"id": memberid})}
-
-    if (!memberdb) return res.status(404).send({"error": "404 - cant find user"});
-
-    var returnobjekt = {
-        id: memberdb.id,
-        name: memberdb.informations.name,
-        discriminator: memberdb.informations.discriminator,
-        avatar: memberdb.informations.avatar,
-        type: require("../../modules/member-type-to-word")(memberdb.type),
-
-        coins: {amount: memberdb.currencys.coins.amount, last_daily: memberdb.currencys.coins.last_daily},
-        ranks: memberdb.currencys.ranks,
-        warnings: memberdb.warnings,
-        stats: memberdb.statistics,
-        delete_in: memberdb.delete_in
     }
-    res.send(returnobjekt)
 
-    
+    next();
 
-
-
-
-    
 })
 
-//music
-const musicapi = require("../../commands/musik").api
-app.use("/music", musicapi)
+//clear api rate limit points every 2 Minutes
+const job = schedule.scheduleJob('*/1 * * * *', function(){
+    api_rate_limiting = {}
+  });
+
+
+app.use("/test", (req, res) => {
+    res.send("Hello World")
+})
+
+
+
 
 module.exports = app;
