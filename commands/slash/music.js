@@ -58,7 +58,7 @@ exports.command = {
 
 		var config = require("../../config.json")
 		const embed = require("../../modules/Embed");
-		const ytdl = require('ytdl-core-discord');
+		const ytdl = require('ytdl-core');
 		const fetch = require('node-fetch');
 		const OLDMEMBER = require("../../Models/OLD-MEMBER")
 

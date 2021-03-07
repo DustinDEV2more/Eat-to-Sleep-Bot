@@ -6,7 +6,7 @@
 <body>
 
 <div class="card">
-    <div class="profilepicture"><img src="https://cdn.discordapp.com/avatars/<%= member.id %>/<%= pb %>.webp?size=2048" alt="Profile Picture"></div>
+    <div class="profilepicture"><img src="<% if (pb == null) {%>/src/default-pb.jpg<%} else{%> https://cdn.discordapp.com/avatars/<%= member.id %>/<%= pb %>.jpg<%}%>?size=2048" alt="Profile Picture"></div>
 
     <div class="infos">
         <div class="name">

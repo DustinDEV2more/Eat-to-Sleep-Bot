@@ -33,7 +33,7 @@ app.get("/coins/:id", async (req, res) => {
     var type = require("../modules/member-type-to-word")(mdb.type)
 
     
-    res.render("coincard", {raw: true, member: mdb, pb: mdb.informations.avatar, type})
+    res.render("CARD_coincard", {raw: true, member: mdb, pb: mdb.informations.avatar, type})
 
 })
 
@@ -47,7 +47,7 @@ app.get("/rank/:id", async (req, res) => {
 
     
     
-    res.render("rankcard", {raw: true, member: mdb, pb: mdb.informations.avatar, type})
+    res.render("CARD_rankcard", {raw: true, member: mdb, pb: mdb.informations.avatar, type})
    
 
 })
@@ -58,7 +58,6 @@ app.get("/ranklist", async (req, res) => {
 
     //get the first 10 Member sorted by Ranks
     var rankdata = await MEMBER.find().sort({"currencys.ranks.rank": -1})
-    console.log(rankdata)
      var top10 = []
 
      rankdata.slice(0, 10).forEach(m => {
@@ -74,7 +73,7 @@ app.get("/ranklist", async (req, res) => {
      })
 
 
-    res.render("ranklistcard", {raw: true, ranklist: top10})
+    res.render("CARD_ranklistcard", {raw: true, ranklist: top10})
 
 })
 
