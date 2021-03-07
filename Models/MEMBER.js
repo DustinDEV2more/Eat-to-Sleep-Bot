@@ -32,7 +32,8 @@ const MemberSchema = mongoose.Schema({
         expire_date: Date,
         scopes: Array,
         redirect: String,
-        cookies: Array
+        cookies: Array,
+        blocking_state: {is_blocked: {type: Boolean, default: false}, date: Date}
     },
 
     usemyvoice: {

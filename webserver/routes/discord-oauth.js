@@ -8,7 +8,15 @@ const nanoid = require("nanoid").nanoid
 
 const app = express.Router();
 
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
+    var cookie_token = req.cookies.token
+    if (cookie_token){
+        var memberdb = await MEMBER.findOne({"oauth.cookies.token": cookie_token})
+        if (memberdb.oauth.blocking_state.is_blocked == true){
+            return res.status(429).send({"error": "rate limiting - You have overloaded the API and do not have permission to continue using the API."});
+        }
+    }
+
     res.redirect(`https://discord.com/api/oauth2/authorize?response_type=code&client_id=${config.discord_api.client_id}&scope=${"identify email"}&redirect_uri=${`${req.protocol}://${req.headers.host}/discord/redirect`}`)
 })
 
@@ -44,6 +52,7 @@ app.get("/redirect", async (req, res) => {
             if (5 < memberdb.oauth.cookies.length) {memberdb.oauth.cookies.shift()} //remove first cookie if there are already 5
 
             if (!memberdb) return res.send("Login nicht möglich. Du bist nicht auf dem Eat, Sleep, Nintendo, Repeat Server")//send error if member is not in database
+            if (memberdb.oauth.blocking_state.is_blocked == true) return res.status(429).send({"error": "rate limiting - You have overloaded the API and do not have permission to continue using the API."});
             //save to db
             await MEMBER.findOneAndUpdate({"id": userinfo.id}, {"oauth": {"access_token": code.access_token, "refresh_token": code.refresh_token, "expire_date": expire_date, "scopes": code.scope.split(" "),"redirect": `${req.protocol}://${req.headers.host}/discord/redirect`,"cookies": memberdb.oauth.cookies}, informations: {name: userinfo.username, discriminator: userinfo.discriminator, avatar: userinfo.avatar}})
             

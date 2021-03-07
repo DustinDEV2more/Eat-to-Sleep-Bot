@@ -14,11 +14,6 @@ app.use("/", (req, res, next) => {
     next();
 })
 
-
-app.get("/user/:id", (req, res) => {
-    res.render("userpage", {raw: false})
-})
-
 app.get("/usemyvoice", async (req, res) => {
     var MEMBER = require("../../Models/MEMBER")
     var memberdb = await MEMBER.findOne({"oauth.cookies.token": req.cookies.token})

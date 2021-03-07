@@ -18,7 +18,7 @@ app.use("/", async (req, res, next) => {
     if (blocked[cookie_token] == -1) return res.status(429).send({"error": "rate limiting - You have overloaded the API and do not have permission to continue using the API."});
     if (!api_rate_limiting[cookie_token]) api_rate_limiting[cookie_token] = 0
     api_rate_limiting[cookie_token] += 1
-    if (api_rate_limiting[cookie_token] > 10){
+    if (api_rate_limiting[cookie_token] > 260){
         //user has exedet the rate limits
 
         //write the blocked state to database
