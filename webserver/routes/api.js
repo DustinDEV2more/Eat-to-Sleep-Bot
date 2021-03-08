@@ -19,7 +19,7 @@ app.use("/", async (req, res, next) => {
     if (blocked[cookie_token] == -1) return res.status(429).send({"error": "api block - You are blocked from this API. You can no longer use this api. If you think this happened by accident, please report to Dustin"});
     if (!api_rate_limiting[cookie_token]) api_rate_limiting[cookie_token] = 0
     api_rate_limiting[cookie_token] += 1
-    if (api_rate_limiting[cookie_token] > 10){
+    if (api_rate_limiting[cookie_token] > 120){
         //user has exedet the rate limits
 
         //write the blocked state to database
