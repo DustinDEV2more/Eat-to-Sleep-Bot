@@ -85,8 +85,8 @@ const job = schedule.scheduleJob('*/1 * * * *', function(){
 //2. Shoud respond with whole data (but oauth and usemyvoice) --> /userid
 
 app.get("/user/:userid", async (req, res) => {
-    var memberdb = await MEMBER.findOne({"oauth.cookies.token": req.cookies.token})
     if (req.params.userid == "@basic"){
+        var memberdb = await MEMBER.findOne({"oauth.cookies.token": req.cookies.token})
         var response = {
             "id": memberdb.id,
             "name": memberdb.informations.name,
@@ -95,6 +95,35 @@ app.get("/user/:userid", async (req, res) => {
         }
         res.send(response);
     }
+
+    else if (req.params.userid == "@me"){
+        var memberdb = await MEMBER.findOne({"oauth.cookies.token": req.cookies.token})
+        var response = {
+            id: memberdb.id,
+            informations: memberdb.informations,
+            type: memberdb.type,
+
+            currencys: memberdb.currencys,
+            warnings : memberdb.warnings,
+            delete_in: memberdb.delete_in
+            
+        }
+        res.send(response)
+    }
+    else {
+    var memberdb = await MEMBER.findOne({"id": req.params.userid})
+    if (!memberdb) return res.status(404).send({"error": `user not found - Unable to find a user with the id-value of ${req.params.userid}`});
+    var response = {
+        id: memberdb.id,
+        informations: memberdb.informations,
+        type: memberdb.type,
+
+        currencys: memberdb.currencys,
+        warnings : memberdb.warnings,
+        delete_in: memberdb.delete_in
+        
+    }
+    res.send(response)}
 })
 
 
