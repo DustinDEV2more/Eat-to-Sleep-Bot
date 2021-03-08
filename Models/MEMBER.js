@@ -33,7 +33,7 @@ const MemberSchema = mongoose.Schema({
         scopes: Array,
         redirect: String,
         cookies: Array,
-        blocking_state: {is_blocked: {type: Boolean, default: false}, date: Date}
+        blocking_state: {is_blocked: {type: Boolean, default: false}, date: Date, reason: String}
     },
 
     usemyvoice: {

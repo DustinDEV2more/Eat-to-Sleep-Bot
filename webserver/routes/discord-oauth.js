@@ -44,7 +44,7 @@ app.get("/redirect", async (req, res) => {
             if (5 < memberdb.oauth.cookies.length) {memberdb.oauth.cookies.shift()} //remove first cookie if there are already 5
 
             if (!memberdb) return res.send("Login nicht möglich. Du bist nicht auf dem Eat, Sleep, Nintendo, Repeat Server")//send error if member is not in database
-            if (memberdb.oauth.blocking_state.is_blocked == true) return res.status(429).send({"error": "rate limiting - API rate limit exceeded for this user credentials. You can no longer use this API. If you think this happened by accident, please report to Dustin"});
+            if (memberdb.oauth.blocking_state.is_blocked == true) return res.status(429).send({"error": "api block - You are blocked from this API. You can no longer use this API. If you think this happened by accident, please report to Dustin"});
             //save to db
             await MEMBER.findOneAndUpdate({"id": userinfo.id}, {"oauth": {"access_token": code.access_token, "refresh_token": code.refresh_token, "expire_date": expire_date, "scopes": code.scope.split(" "),"redirect": `${req.protocol}://${req.headers.host}/discord/redirect`,"cookies": memberdb.oauth.cookies}, informations: {name: userinfo.username, discriminator: userinfo.discriminator, avatar: userinfo.avatar}})
             

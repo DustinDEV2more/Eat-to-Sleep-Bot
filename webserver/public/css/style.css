@@ -222,6 +222,20 @@ header nav {
     list-style: none;
 }
 
-/* .hideuntiluserload {
-    display: none;
-} */
+/* Admin Page */
+
+.api-tools {
+    margin-left: 100px;
+}
+
+.api-tools ul li {
+    list-style: none;
+    margin-top: 30px;
+}
+
+.api-tools a {
+    text-decoration: none;
+    padding: 12px;
+    border-radius: 4px;
+    background-color: #7289DA;
+}

@@ -8,7 +8,7 @@ const fetchuserdata = () => {
     .then(response => {
      
     response.json().then(data => {{
-      if (response.status == 429) return SimpleNotification.error({text: `API Response ${response.status}: \r` + `\`\`${data.error}\`\`` + "\r\rDu wurdest von der API gebannt weil du das Limit für Anfragen pro Sekunde überschritten hast. Melde dich bitte bei Dustin um diese Sperre aufzuheben",}, {sticky: true, closeButton: false, closeOnClick: false})
+      if (response.status == 429) return SimpleNotification.error({text: `API Response ${response.status}: \r` + `\`\`${data.error}\`\`` + "\r\rDu wurdest von der API gebannt. Entweder du wurdest manuell gebannt oder das System hat dich automatisch gebannt wenn du hast das Limit für Anfragen pro Minute überschritten haben solltest. Melde dich bitte bei Dustin um diese Sperre aufzuheben",}, {sticky: true, closeButton: false, closeOnClick: false})
       if (response.status > 226) return SimpleNotification.error({text: `API Response ${response.status}: \r` + `\`\`${data.error}\`\`` + "\r\rEin erneuter Login mit Discord **könnte** helfen",
       buttons: [{
         value: 'Discord Login page ', // The text inside the button

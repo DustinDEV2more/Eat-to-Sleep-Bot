@@ -14,6 +14,9 @@ app.use("/", (req, res, next) => {
     next();
 })
 
+const admin_panel = require("./we - ADMIN")
+app.use("/admin", admin_panel)
+
 app.get("/usemyvoice", async (req, res) => {
     var MEMBER = require("../../Models/MEMBER")
     var memberdb = await MEMBER.findOne({"oauth.cookies.token": req.cookies.token})

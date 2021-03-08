@@ -16,16 +16,16 @@ app.use("/", async (req, res, next) => {
     if (!cookie_token) return res.status(401).send({"error": "Unauthorized - missing cookie"});
     
     //rate limit
-    if (blocked[cookie_token] == -1) return res.status(429).send({"error": "rate limiting - API rate limit exceeded for this user credentials. You can no longer use this api. If you think this happened by accident, please report to Dustin"});
+    if (blocked[cookie_token] == -1) return res.status(429).send({"error": "api block - You are blocked from this API. You can no longer use this api. If you think this happened by accident, please report to Dustin"});
     if (!api_rate_limiting[cookie_token]) api_rate_limiting[cookie_token] = 0
     api_rate_limiting[cookie_token] += 1
-    if (api_rate_limiting[cookie_token] > 120){
+    if (api_rate_limiting[cookie_token] > 10){
         //user has exedet the rate limits
 
         //write the blocked state to database
-        await MEMBER.findOneAndUpdate({"oauth.cookies.token": cookie_token}, {"oauth.blocking_state.is_blocked": true, "oauth.blocking_state.date": new Date()})
+        await MEMBER.findOneAndUpdate({"oauth.cookies.token": cookie_token}, {"oauth.blocking_state.is_blocked": true, "oauth.blocking_state.date": new Date(), "oauth.blocking_state.reason": "API rate limit exceeded"})
         blocked[cookie_token] = -1
-        return res.status(429).send({"error": "rate limiting - API rate limit exceeded for this user credentials. You can no longer use this API. If you think this happened by accident, please report to Dustin"});
+        return res.status(429).send({"error": "api block - You are blocked from this API. You can no longer use this API. If you think this happened by accident, please report to Dustin"});
     }
 
     //try to find member wish is assosiated to the cookie
@@ -37,7 +37,7 @@ app.use("/", async (req, res, next) => {
 
     if (memberdb.oauth.blocking_state.is_blocked == true){
         blocked[cookie_token] = -1
-        return res.status(429).send({"error": "rate limiting - API rate limit exceeded for this user credentials. You can no longer use this API. If you think this happened by accident, please report to Dustin"});
+        return res.status(429).send({"error": "api block - You are blocked from this API. You can no longer use this API. If you think this happened by accident, please report to Dustin"});
     }
 
     //check if Discord credentials still valid and active
