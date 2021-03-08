@@ -11,7 +11,7 @@ exports.command = {
         
         const viewport = {
             width: 850,
-            height: 570,
+            height: 580,
         };
 
         (async () => {
