@@ -3,6 +3,7 @@ const MEMBER = require("../../Models/MEMBER")
 const DiscordOauth2 = require("discord-oauth2");
 const config = require("../../config.json");
 const schedule = require("node-schedule");
+const { ConnectionStates } = require("mongoose");
 
 const app = express.Router();
 
@@ -15,16 +16,16 @@ app.use("/", async (req, res, next) => {
     if (!cookie_token) return res.status(401).send({"error": "Unauthorized - missing cookie"});
     
     //rate limit
-    if (blocked[cookie_token] == -1) return res.status(429).send({"error": "rate limiting - You have overloaded the API and do not have permission to continue using the API."});
+    if (blocked[cookie_token] == -1) return res.status(429).send({"error": "rate limiting - API rate limit exceeded for this user credentials. You can no longer use this api. If you think this happened by accident, please report to Dustin"});
     if (!api_rate_limiting[cookie_token]) api_rate_limiting[cookie_token] = 0
     api_rate_limiting[cookie_token] += 1
-    if (api_rate_limiting[cookie_token] > 260){
+    if (api_rate_limiting[cookie_token] > 120){
         //user has exedet the rate limits
 
         //write the blocked state to database
         await MEMBER.findOneAndUpdate({"oauth.cookies.token": cookie_token}, {"oauth.blocking_state.is_blocked": true, "oauth.blocking_state.date": new Date()})
         blocked[cookie_token] = -1
-        return res.status(429).send({"error": "rate limiting - You have overloaded the API and do not have permission to continue using the API."});
+        return res.status(429).send({"error": "rate limiting - API rate limit exceeded for this user credentials. You can no longer use this API. If you think this happened by accident, please report to Dustin"});
     }
 
     //try to find member wish is assosiated to the cookie
@@ -36,7 +37,7 @@ app.use("/", async (req, res, next) => {
 
     if (memberdb.oauth.blocking_state.is_blocked == true){
         blocked[cookie_token] = -1
-        return res.status(429).send({"error": "rate limiting - You have overloaded the API and do not have permission to continue using the API."});
+        return res.status(429).send({"error": "rate limiting - API rate limit exceeded for this user credentials. You can no longer use this API. If you think this happened by accident, please report to Dustin"});
     }
 
     //check if Discord credentials still valid and active
@@ -58,14 +59,17 @@ app.use("/", async (req, res, next) => {
                 expire_date.setSeconds(expire_date.getSeconds() + response.expires_in)
                 await MEMBER.findOneAndUpdate({"id": memberdb.id}, {"oauth.access_token": response.access_token, "oauth.refresh_token": response.refresh_token, "oauth.expire_date": expire_date})
                 memberdb.oauth.access_token = response.access_token
+                next();
             }).catch(error => {
                 //token was not able to get refrehed
                 return res.status(511).send({"error": "Unauthorized by Discord - The Server is currently not able to gather Informations about your Discord Account"});
             })
 
+    } else {
+        next();
     }
 
-    next();
+    
 
 })
 
@@ -74,9 +78,23 @@ const job = schedule.scheduleJob('*/1 * * * *', function(){
     api_rate_limiting = {}
   });
 
+//1. Shoud respond with Avatar, Name, Discrimminator, and id --> /@basic
 
-app.use("/test", (req, res) => {
-    res.send("Hello World")
+//2. Shoud respond with whole data (but oauth and usemyvoice) --> /@me
+
+//2. Shoud respond with whole data (but oauth and usemyvoice) --> /userid
+
+app.get("/user/:userid", async (req, res) => {
+    var memberdb = await MEMBER.findOne({"oauth.cookies.token": req.cookies.token})
+    if (req.params.userid == "@basic"){
+        var response = {
+            "id": memberdb.id,
+            "name": memberdb.informations.name,
+            "discriminator": memberdb.informations.discriminator,
+            "avatar": memberdb.informations.avatar
+        }
+        res.send(response);
+    }
 })
 
 

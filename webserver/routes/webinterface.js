@@ -35,14 +35,13 @@ app.post("/usemyvoice/", async (req, res) => {
 
     console.log(req.body)
 
-    if (!req.body.signature || req.body.signature == "") return res.status(401).send({error: "signature is required"});
-    if (!req.body.accepted) return res.status(401).send({error: "you need to accept the terms"});
+    if (!req.body.signature || req.body.signature == "") return res.status(401).send({error: "missing credentials -  signature is required"});
+    if (!req.body.accepted) return res.status(401).send({error: "missing credentials - you need to accept the terms"});
 
-    var memberdb = await MEMBER.findOneAndUpdate({"oauth.cookies.token": req.cookies.token}, {usemyvoice: {accepted: true ,date: new Date(), signature: req.body.signature}}).then(async () => {
         if (req.body.email) {
-
             //fetch Email from Discord
             var memberdb = await MEMBER.findOne({"oauth.cookies.token": req.cookies.token})
+            if (memberdb.oauth.scopes.find(x => x === "email") == undefined) return res.status(402).send({error: "missing discord scope - We cant send you Emails. You didnt allowed the Discord scope"});
             fetch("https://discord.com/api/users/@me", {headers: {Authorization: `Bearer ${memberdb.oauth.access_token}`}}).then(res => res.json()).then(async userinfo => {
     
             //Email
@@ -92,25 +91,23 @@ app.post("/usemyvoice/", async (req, res) => {
                       return console.log(error);
                     }
                     console.log('Email sent: %s', info.messageId);
-                    discordclient.users.cache.get(userinfo.id).send("✅ Vielen Dank! Du kannst nun in Stream Channel joinen.")
-                    discordclient.channels.cache.get("586176769409810452").send(`${userinfo.username} hat die Einverständniserklärung zur Nutzung von Stimmenaufnahmen auf den Server hinterlegt.`)
-                    res.sendStatus(200)
+
                     
                   });
     
             })
     
         }
-        else {
-            discordclient.channels.cache.get("586176769409810452").send(`${req.body.signature} hat die Einverständniserklärung zur Nutzung von Stimmenaufnahmen auf den Server hinterlegt.`)
-            res.sendStatus(200)
-        }
-    }).catch((error) => {
-        res.sendStatus(500)
-        console.log(error)
-    })
-})
+        
+        await MEMBER.findOneAndUpdate({"oauth.cookies.token": req.cookies.token}, {usemyvoice: {accepted: true ,date: new Date(), signature: req.body.signature}}).then(() => {
+            //discordclient.channels.cache.get("586176769409810452").send(`${req.body.signature} hat die Einverständniserklärung zur Nutzung von Stimmenaufnahmen auf den Server hinterlegt.`)
+            res.status(200).send({message: "Data was stored successfully"})
+        }).catch((error) => {
+            res.status(500).send({error: "unknown error - something went wrong on our side"})
+        })
 
+        
+    })
 
 app.use("/*", (req, res) => {
     res.status(404).render("404", {raw: false})

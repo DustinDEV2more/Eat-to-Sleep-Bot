@@ -9,7 +9,7 @@ document.getElementById('button').onclick = function (evt) {
     document.querySelector("#button").setAttribute("style", "display: none;")
     document.querySelector("#loading").setAttribute("style", "display: block;")
 
-    fetch('http://server.dustin-dm.de:7869/webinterface/usemyvoice/', {
+    fetch('http://192.168.0.28:7869/webinterface/usemyvoice/', {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'
@@ -20,27 +20,29 @@ document.getElementById('button').onclick = function (evt) {
             email: email != null
         })
         }).then(response => {
+            response.json().then(data => {{
             if (response.status == 200){
-                document.querySelector("#button").setAttribute("style", "display: block;")
-                document.querySelector("#loading").setAttribute("style", "display: none;")
+                document.querySelector(".submit-button").setAttribute("style", "display: none;")
 
-                document.querySelector(".submit-button").setAttribute("style", "background-color: #1dd1a1;")
-                document.querySelector("#button").innerHTML = "✅ Du kannst diesen Tab nun schließen"
-                document.querySelector("#button").setAttribute("id", "button-dis")
+                return SimpleNotification.success({text: "Du hast die Einverständniss Erklärung erfolgreich unterschrieben!\rDu kannst diesen Tab nun schließen",}, {sticky: true, closeButton: false, closeOnClick: false})
 
 
             }
             else {
                 document.querySelector("#button").setAttribute("style", "display: block;")
                 document.querySelector("#loading").setAttribute("style", "display: none;")
-                document.querySelector(".submit-button").setAttribute("style", "background-color: #ee5253;")
-                document.querySelector("#button").innerHTML = "❌ something went wrong"
+                if (response.status == 401) return SimpleNotification.error({text: "Du hast ein oder mehrere Pflichtfelder vergessen. Sie sind mit einem * makiert\r\r" + `\`\`${data.error}\`\``},{duration: 10000})
+                if (response.status == 402) return SimpleNotification.error({text: "Leider können wir dir keine Email senden, da du dies bei der Discord Authentication verhindert hast. Bitte entferne die auswahlmöglichkeit und probiere es erneut.\r\r" + `\`\`${data.error}\`\``},{duration: 20000})
+                if (response.status == 500) return SimpleNotification.error({text: `API Response ${response.status}: \r` + `\`\`${data.error}\`\``},{duration: 15000})
+            
             }
-        }).catch(() => {
+        }})
+        }).catch((error) => {
+            console.log(error)
             document.querySelector("#button").setAttribute("style", "display: block;")
             document.querySelector("#loading").setAttribute("style", "display: none;")
-            document.querySelector(".submit-button").setAttribute("style", "background-color: #ee5253;")
-            document.querySelector("#button").innerHTML = "❌ something went wrong"
+            return SimpleNotification.error({text: "Etwas ist schiefgelaufen"},
+            {duration: 15000})
         })
 
     
