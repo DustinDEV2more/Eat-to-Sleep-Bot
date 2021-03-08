@@ -5,5 +5,5 @@ module.exports = function (type_number) {
 
     //Alles ab 90 hat zugang zum Admin Panal
     if (type_number == 99)  return "Admin";
-    return "Jemand"
+    return "?"
 }
