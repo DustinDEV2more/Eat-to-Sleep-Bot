@@ -14,6 +14,14 @@ app.use("/", (req, res, next) => {
     next();
 })
 
+app.use("/imprint", (req, res) => {
+    res.render("xyz_impressum", {raw: false})
+})
+
+app.use("/datenschutz", (req, res) => {
+    res.render("xyz_datenschutz", {raw: false})
+})
+
 const admin_panel = require("./we - ADMIN")
 app.use("/admin", admin_panel)
 
