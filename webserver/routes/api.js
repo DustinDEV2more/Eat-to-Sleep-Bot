@@ -11,32 +11,33 @@ const app = express.Router();
 var api_rate_limiting = {}
 var blocked = {}
 app.use("/", async (req, res, next) => {
-    var cookie_token = req.cookies.token
+    var auth_token = req.query.token
+
     //if no cookie was send in request
-    if (!cookie_token) return res.status(401).send({"error": "Unauthorized - missing cookie"});
+    if (!auth_token) return res.status(401).send({"error": "Unauthorized - missing token"});
     
     //rate limit
-    if (blocked[cookie_token] == -1) return res.status(429).send({"error": "api block - You are blocked from this API. You can no longer use this api. If you think this happened by accident, please report to Dustin"});
-    if (!api_rate_limiting[cookie_token]) api_rate_limiting[cookie_token] = 0
-    api_rate_limiting[cookie_token] += 1
-    if (api_rate_limiting[cookie_token] > 120){
+    if (blocked[auth_token] == -1) return res.status(429).send({"error": "api block - You are blocked from this API. You can no longer use this api. If you think this happened by accident, please report to Dustin"});
+    if (!api_rate_limiting[auth_token]) api_rate_limiting[auth_token] = 0
+    api_rate_limiting[auth_token] += 1
+    if (api_rate_limiting[auth_token] > 120){
         //user has exedet the rate limits
 
         //write the blocked state to database
-        await MEMBER.findOneAndUpdate({"oauth.cookies.token": cookie_token}, {"oauth.blocking_state.is_blocked": true, "oauth.blocking_state.date": new Date(), "oauth.blocking_state.reason": "API rate limit exceeded"})
-        blocked[cookie_token] = -1
+        await MEMBER.findOneAndUpdate({"oauth.cookies.token": auth_token}, {"oauth.blocking_state.is_blocked": true, "oauth.blocking_state.date": new Date(), "oauth.blocking_state.reason": "API rate limit exceeded"})
+        blocked[auth_token] = -1
         return res.status(429).send({"error": "api block - You are blocked from this API. You can no longer use this API. If you think this happened by accident, please report to Dustin"});
     }
 
     //try to find member wish is assosiated to the cookie
-    var memberdb = await MEMBER.findOne({"oauth.cookies.token": cookie_token})
+    var memberdb = await MEMBER.findOne({"oauth.cookies.token": auth_token})
 
     //didnt find member trough database
     if (!memberdb) return res.status(401).send({"error": "Unauthorized - credentials not valid"});
     //member found in database
 
     if (memberdb.oauth.blocking_state.is_blocked == true){
-        blocked[cookie_token] = -1
+        blocked[auth_token] = -1
         return res.status(429).send({"error": "api block - You are blocked from this API. You can no longer use this API. If you think this happened by accident, please report to Dustin"});
     }
 
@@ -78,15 +79,9 @@ const job = schedule.scheduleJob('*/1 * * * *', function(){
     api_rate_limiting = {}
   });
 
-//1. Shoud respond with Avatar, Name, Discrimminator, and id --> /@basic
-
-//2. Shoud respond with whole data (but oauth and usemyvoice) --> /@me
-
-//2. Shoud respond with whole data (but oauth and usemyvoice) --> /userid
-
 app.get("/user/:userid", async (req, res) => {
     if (req.params.userid == "@basic"){
-        var memberdb = await MEMBER.findOne({"oauth.cookies.token": req.cookies.token})
+        var memberdb = await MEMBER.findOne({"oauth.cookies.token": req.query.token})
         var response = {
             "id": memberdb.id,
             "name": memberdb.informations.name,
@@ -97,7 +92,7 @@ app.get("/user/:userid", async (req, res) => {
     }
 
     else if (req.params.userid == "@me"){
-        var memberdb = await MEMBER.findOne({"oauth.cookies.token": req.cookies.token})
+        var memberdb = await MEMBER.findOne({"oauth.cookies.token": req.query.token})
         var response = {
             id: memberdb.id,
             informations: memberdb.informations,
@@ -127,6 +122,19 @@ app.get("/user/:userid", async (req, res) => {
 })
 
 
+//admin shit
+app.use("/admin", async (req, res, next) => {
+    var MEMBER = require("../../Models/MEMBER")
+    var memberdb = await MEMBER.findOne({"oauth.cookies.token": req.query.token})
 
+    if (memberdb.type < 90) return res.status(403).send({"error": "missing permission -  Your permisson level is to low"})
+    next();
+})
 
+app.get("/admin/events", async (req, res) => {
+    var EVENTS = require("../../Models/EVENTS")
+    var events = await EVENTS.find({});
+
+    res.send(events)
+})
 module.exports = app;

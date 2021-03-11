@@ -9,10 +9,14 @@ const nanoid = require("nanoid").nanoid
 const app = express.Router();
 
 app.get("/", async (req, res) => {
-    res.redirect(`https://discord.com/api/oauth2/authorize?response_type=code&client_id=${config.discord_api.client_id}&scope=${"identify email"}&redirect_uri=${`${req.protocol}://${req.headers.host}/discord/redirect`}`)
+    var protocol = "http";
+    if (req.hostname.toLowerCase() == "eat-sleep-nintendo-repeat.dustin-dm.de") protocol = "https"
+    res.redirect(`https://discord.com/api/oauth2/authorize?response_type=code&client_id=${config.discord_api.client_id}&scope=${"identify email"}&redirect_uri=${`${protocol}://${req.headers.host}/discord/redirect`}`)
 })
 
 app.get("/redirect", async (req, res) => {
+    var protocol = "http";
+    if (req.hostname.toLowerCase() == "eat-sleep-nintendo-repeat.dustin-dm.de") protocol = "https"
     
     const oauth = new DiscordOauth2();
     var code = req.query.code
@@ -26,7 +30,7 @@ app.get("/redirect", async (req, res) => {
         scope: "identify email",
         grantType: "authorization_code",
         
-        redirectUri: `${req.protocol}://${req.headers.host}/discord/redirect`,
+        redirectUri: `${protocol}://${req.headers.host}/discord/redirect`,
     }).then(code => {
         //get loged in user informations
 
@@ -63,7 +67,10 @@ app.get("/redirect", async (req, res) => {
 
 
 
-    }).catch(e => res.redirect("/discord")) //promt user again to the login page if something didnt work
+    }).catch(e => {
+        res.redirect("/discord")
+        console.log(e)
+    }) //promt user again to the login page if something didnt work
 })
 
 

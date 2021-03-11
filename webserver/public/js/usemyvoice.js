@@ -1,3 +1,14 @@
+function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+
 document.getElementById('button').onclick = function (evt) { 	
     let signature = document.getElementById('name');
     let accepted = document.querySelector(".checkbox1:checked")
@@ -9,7 +20,7 @@ document.getElementById('button').onclick = function (evt) {
     document.querySelector("#button").setAttribute("style", "display: none;")
     document.querySelector("#loading").setAttribute("style", "display: block;")
 
-    fetch('http://192.168.0.28:7869/webinterface/usemyvoice/', {
+    fetch('https://eat-sleep-nintendo-repeat.de/webinterface/usemyvoice?token=' + readCookie("token"), {
         method: "POST",
         headers: {
             'Content-Type': 'application/json'

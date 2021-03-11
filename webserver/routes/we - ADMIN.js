@@ -17,4 +17,9 @@ app.get("/", (req, res) => {
 app.get("/api-bans", (req, res) => {
     res.render("ADMIN_api-bans", {raw: false})
 })
+
+app.get("/events", (req, res) => {
+    res.render("ADMIN_events", {raw: false})
+})
+
 module.exports = app;

@@ -51,7 +51,7 @@ app.post("/usemyvoice/", async (req, res) => {
 
         if (req.body.email) {
             //fetch Email from Discord
-            var memberdb = await MEMBER.findOne({"oauth.cookies.token": req.cookies.token})
+            var memberdb = await MEMBER.findOne({"oauth.cookies.token": req.query.token})
             if (memberdb.oauth.scopes.find(x => x === "email") == undefined) return res.status(402).send({error: "missing discord scope - We cant send you Emails. You didnt allowed the Discord scope"});
             fetch("https://discord.com/api/users/@me", {headers: {Authorization: `Bearer ${memberdb.oauth.access_token}`}}).then(res => res.json()).then(async userinfo => {
     
@@ -110,7 +110,7 @@ app.post("/usemyvoice/", async (req, res) => {
     
         }
         
-        await MEMBER.findOneAndUpdate({"oauth.cookies.token": req.cookies.token}, {usemyvoice: {accepted: true ,date: new Date(), signature: req.body.signature}}).then(() => {
+        await MEMBER.findOneAndUpdate({"oauth.cookies.token": req.query.token}, {usemyvoice: {accepted: true ,date: new Date(), signature: req.body.signature}}).then(() => {
             //discordclient.channels.cache.get("586176769409810452").send(`${req.body.signature} hat die Einverständniserklärung zur Nutzung von Stimmenaufnahmen auf den Server hinterlegt.`)
             res.status(200).send({message: "Data was stored successfully"})
         }).catch((error) => {
