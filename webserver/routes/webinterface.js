@@ -41,7 +41,7 @@ app.get("/usemyvoice", async (req, res) => {
     res.render("usemyvoice", {raw: false, user: memberdb.informations, year: new Date().getFullYear()})
 })
 
-app.post("/usemyvoice/", async (req, res) => {
+app.post("/usemyvoice", async (req, res) => {
     var MEMBER = require("../../Models/MEMBER")
 
     console.log(req.body)
@@ -119,6 +119,10 @@ app.post("/usemyvoice/", async (req, res) => {
 
         
     })
+
+app.get("/music", (req, res) => {
+    res.render("MUSIC", {raw: false})
+})
 
 app.use("/*", (req, res) => {
     res.status(404).render("404", {raw: false})

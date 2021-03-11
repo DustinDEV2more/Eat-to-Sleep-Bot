@@ -222,7 +222,7 @@ const express = require("express");
 const app = express.Router();
 
 app.get("/queue", (req, res) => {
-	 if (client.music["585511241628516352"] == undefined || client.music["585511241628516352"] == null) return res.send({})
+	 if (client.music["585511241628516352"] == undefined || client.music["585511241628516352"] == null) return res.send([])
 		res.send(client.music["585511241628516352"].queue)
 })
 

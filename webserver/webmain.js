@@ -52,7 +52,6 @@ app.get("/rank/:id", async (req, res) => {
 
 })
 
-//CHANGE OLD DATABASE TO NEW
 app.get("/ranklist", async (req, res) => {
     var MEMBER = require("../Models/MEMBER")
 
@@ -76,6 +75,7 @@ app.get("/ranklist", async (req, res) => {
     res.render("CARD_ranklistcard", {raw: true, ranklist: top10})
 
 })
+
 
 
 

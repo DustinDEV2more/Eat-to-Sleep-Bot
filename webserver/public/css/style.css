@@ -166,103 +166,49 @@ header nav {
     }
 }
 
-/* UserPage Zeug */
-.adminusertools{
-    background-color: #414346;
-    display: none;
+/* Music Page */
+
+.music-page {
+    margin-right: 10%;
+    margin-left: 10%;
+    text-align: center;
 }
 
-.adminusertools ul {
+.queue {
+    margin-top: 10px;
+    background-color: #1a1c1f;
+    border-radius: 7px;
+    padding: 4px;
+    margin-bottom: 10px;
+}
+
+.queue-element {
     display: flex;
-    list-style: none;
-    justify-content: center;
     align-items: center;
+    background-color: #101e3a;
+    border-radius: 7px;
 }
 
-.adminusertools ul li p {
-    color: black;
-    padding: 7px;
+.queue li {
+    list-style: none;
+    margin-top: 5px;
+}
+
+.queue-element h1 {
+    /* margin-right: 3px; */
+}
+
+.queue-element h3 {
     margin: 5px;
-    border-radius: 6px;
-    cursor: pointer;
 }
 
-.deletemessage {
-    background-color: #d63031;
-    display: flex;
-    justify-content: center;
-    display: none;
+@media screen and (max-width:768px){
+    .music-page {
+        margin-right: 2%;
+        margin-left: 2%;
+    }
 }
 
-.maincard {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #5a5a5a;
-    margin: 40px;
-    border-radius: 20px;
-    padding: 10px;
-}
-
-.maincard img {
-    border-radius: 50%;
-    width: 250px;
-    margin: 10px;
-}
-
-.maincard #tag {
-    margin-left: 10px;
-    background-color: #7289DA;
-    border-radius: 5%;
-    padding: 3px;
-}
-
-.doublecard {
-    display: flex;
-    justify-content: space-evenly;
-    margin-left: 40px;
-    margin-right: 40px;
-}
-
-.doublecard h1 {
-    margin-bottom: 5px;
-}
-
-.rank {
-    background-color: #5a5a5a;
-    /* margin-left: 40px; */
-    border-radius: 20px;
-    padding: 10px;
-    min-width: 500px;
-}
-
-.coins {
-    background-color: #5a5a5a;
-    /* margin-left: 40px; */
-    border-radius: 20px;
-    padding: 10px;
-    min-width: 500px;
-}
-
-.coins img {
-    width: 35px;
-}
-
-.coins .coinsamount {
-    display: flex;
-    align-items: center;
-}
-
-.userwarns {
-    background-color: #5a5a5a;
-    margin: 40px;
-    border-radius: 20px;
-    padding: 10px;
-}
-.userwarns li {
-    margin-bottom: 20px;
-    list-style: none;
-}
 
 /* Admin Page */
 
