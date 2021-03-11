@@ -121,6 +121,9 @@ app.get("/user/:userid", async (req, res) => {
     res.send(response)}
 })
 
+//music
+var music_api = require("../../commands/musik").api
+app.use("/music", music_api)
 
 //admin shit
 app.use("/admin", async (req, res, next) => {

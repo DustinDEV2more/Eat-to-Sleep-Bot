@@ -61,9 +61,6 @@ exports.command = {
 		const ytdl = require('ytdl-core');
 		const fetch = require('node-fetch');
 		const OLDMEMBER = require("../../Models/OLD-MEMBER")
-
-        const mdata = await OLDMEMBER.findOne({"info.id": int.member.user.id})
-		if (mdata.coins.purchases.find(x => x.id == 981) === undefined) return send(int, embed.error_user("Fehlende Berechtigung", "Du kannst diesen Command aktuell nicht benutzten. Die Rechte für diesen Command lassen sich im Shop erwerben"))
 	
 		//Adding Song to queue
 		if (args.find(x => x.name == "aktion").value == "play"){

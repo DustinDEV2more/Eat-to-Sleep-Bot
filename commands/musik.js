@@ -11,9 +11,6 @@ exports.command = {
 		const ytdl = require('ytdl-core');
 		const fetch = require('node-fetch');
 		const OLDMEMBER = require("../Models/OLD-MEMBER")
-
-		const mdata = await OLDMEMBER.findOne({"info.id": message.author.id})
-		if (mdata.coins.purchases.find(x => x.id == 981) === undefined) return message.channel.send(embed.error_user("Fehlende Berechtigung", "Du kannst diesen Command aktuell nicht benutzten. Die Rechte für diesen Command lassen sich im Shop erwerben"))
 	
 		//Adding Song to queue
 		if (args[0].toLocaleLowerCase() == "play"){
@@ -224,10 +221,9 @@ var {client} = require("../index")
 const express = require("express");
 const app = express.Router();
 
-app.use("/:guildid/queue", (req, res) => {
-	 if (client.music[req.query.guildid] == undefined || client.music[req.query.guildid] == null) return res.status(401).send({"error": "No queue availible"})
-	 		res.send(client.music[req.params.guildid].queue)
-	
+app.get("/queue", (req, res) => {
+	 if (client.music["585511241628516352"] == undefined || client.music["585511241628516352"] == null) return res.send({})
+		res.send(client.music["585511241628516352"].queue)
 })
 
 exports.api = app;
